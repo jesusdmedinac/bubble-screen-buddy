@@ -13,6 +13,8 @@ type ChatMessage = {
   content: string;
 };
 
+type UserProfile = Tables<"profiles">;
+
 const normalizeText = (value: string) =>
   value
     .toLowerCase()
@@ -38,6 +40,25 @@ const EMOTION_KEYWORDS = new Set(
   ].map(normalizeText)
 );
 
+const REFLECTION_KEYWORDS = new Set(
+  [
+    "reflexion",
+    "reflexionar",
+    "aprendi",
+    "aprendiendo",
+    "aprendizaje",
+    "leccion",
+    "lecciones",
+    "insight",
+    "autoconocimiento",
+    "autoevaluacion",
+    "gratitud",
+    "objetivo",
+    "intencion",
+    "proposito",
+  ].map(normalizeText)
+);
+
 const countEmotionMentions = (messages: ChatMessage[]) => {
   const found = new Set<string>();
 
@@ -59,9 +80,11 @@ const countEmotionMentions = (messages: ChatMessage[]) => {
 
 const shouldCompleteChallenge = (
   challenge: UserChallengeWithTemplate,
-  messages: ChatMessage[]
+  messages: ChatMessage[],
+  profile: UserProfile | null
 ): boolean => {
   const title = challenge.challenge_templates?.title;
+  const type = challenge.challenge_templates?.type;
   if (!title) return false;
 
   const normalizedTitle = normalizeText(title);
@@ -77,6 +100,37 @@ const shouldCompleteChallenge = (
 
   if (normalizedTitle.includes("explorador emocional")) {
     return countEmotionMentions(messages) >= 3;
+  }
+
+  if (normalizedTitle.includes("racha de 3")) {
+    return (profile?.streak_days ?? 0) >= 3;
+  }
+
+  if (normalizedTitle.includes("racha de 7")) {
+    return (profile?.streak_days ?? 0) >= 7;
+  }
+
+  if (type === "weekly" || normalizedTitle.includes("reflexion") || normalizedTitle.includes("reflexion")) {
+    const reflectionMatches = new Set<string>();
+    let longResponses = 0;
+
+    for (const message of messages) {
+      if (message.role !== "user") continue;
+
+      const normalized = normalizeText(message.content);
+      if (normalized.length >= 200) {
+        longResponses += 1;
+      }
+
+      const words = normalized.match(/[a-zñ]+/g) ?? [];
+      for (const word of words) {
+        if (REFLECTION_KEYWORDS.has(word)) {
+          reflectionMatches.add(word);
+        }
+      }
+    }
+
+    return reflectionMatches.size >= 3 || (reflectionMatches.size >= 1 && longResponses >= 2);
   }
 
   return false;
@@ -269,22 +323,42 @@ export const useChallengeProgressAutomation = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        const { data, error } = await supabase
-          .from("user_challenges")
-          .select(`
-            *,
-            challenge_templates (*)
-          `)
-          .eq("user_id", user.id)
-          .in("status", ["active", "in_progress"]);
+        const { error: streakError } = await supabase.rpc("update_user_streak", {
+          p_user_id: user.id,
+        });
 
-        if (error) throw error;
-        if (!data || data.length === 0) return;
+        if (streakError) {
+          console.error("No se pudo actualizar la racha del usuario:", streakError);
+        }
 
-        for (const rawChallenge of data as UserChallengeWithTemplate[]) {
+        const [challengesResponse, profileResponse] = await Promise.all([
+          supabase
+            .from("user_challenges")
+            .select(`
+              *,
+              challenge_templates (*)
+            `)
+            .eq("user_id", user.id)
+            .in("status", ["active", "in_progress"]),
+          supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single<UserProfile>(),
+        ]);
+
+        if (challengesResponse.error) throw challengesResponse.error;
+        if (profileResponse.error) throw profileResponse.error;
+
+        const challenges = challengesResponse.data as UserChallengeWithTemplate[];
+        const profile = profileResponse.data ?? null;
+
+        if (!challenges || challenges.length === 0) return;
+
+        for (const rawChallenge of challenges) {
           if ((rawChallenge.progress ?? 0) >= 100) continue;
 
-          const eligible = shouldCompleteChallenge(rawChallenge, messages);
+          const eligible = shouldCompleteChallenge(rawChallenge, messages, profile);
           if (!eligible) continue;
 
           await updateProgress({

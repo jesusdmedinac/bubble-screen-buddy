@@ -1,4 +1,4 @@
-import { X, Infinity, TrendingUp, Headphones } from "lucide-react";
+import { X, Infinity as InfinityIcon, TrendingUp, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -42,7 +42,7 @@ const PremiumModal = ({ open, onOpenChange }: PremiumModalProps) => {
           <div className="space-y-5">
             <div className="flex gap-4 items-start">
               <div className="bg-success/20 p-3 rounded-2xl">
-                <Infinity className="h-6 w-6 text-success" />
+                <InfinityIcon className="h-6 w-6 text-success" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Chats con IA ilimitados</h3>

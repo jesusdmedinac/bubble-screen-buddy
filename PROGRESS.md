@@ -42,7 +42,7 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
-- ✅ Automatización de progreso al 100% para desafíos según eventos del chat
+- ✅ Automatización de progreso al 100% para desafíos diarios, semanales y de racha desde eventos del chat (incluye actualización de streak y XP)
 - ✅ Integración de otorgamiento de XP automático al completar desafíos (RPC `add_xp_to_user`)
 - ✅ Diseño e implementación del esquema de base de datos para gamificación
   - ✅ Tabla `challenge_templates` (catálogo de desafíos disponibles)
@@ -65,7 +65,7 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
   - ✅ Sistema de aceptación de desafíos funcional
 
 #### En Progreso
-- 🔄 Extender reglas de progreso automático a desafíos adicionales (rachas, actividades guiadas)
+- 🔄 Definir triggers de progreso para actividades guiadas fuera del chat
 
 #### Pendiente Inmediato
 - ⏳ UI de página de Recompensas con inventario
@@ -117,9 +117,9 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Diseñar reglas adicionales para desafíos semanales y de racha
    - Integrar otorgamiento de XP en actividades fuera del chat
    - Actualizar perfil con visualización de estadísticas
+   - Definir triggers para actividades guiadas y logros especiales
 
 2. **Corto Plazo** (Próximas 2 semanas)
    - Desarrollar UI de página de Recompensas
