@@ -7,6 +7,31 @@ Este documento registra el historial de desarrollo del proyecto Bubble, incluyen
 
 ## 2025-09-30 - Inicio del Proyecto y MVP Base
 
+### Sistema de Desafíos Frontend - Implementación Completa
+**Tipo**: Feature  
+**Fase**: 2 - Gamificación (35%)
+
+#### Cambios Realizados
+- Creado hook `useChallenges.ts` con gestión completa de desafíos:
+  - Query para obtener templates de desafíos disponibles
+  - Query para obtener desafíos activos del usuario con join a templates
+  - Mutation para aceptar nuevos desafíos
+  - Mutation para actualizar progreso de desafíos
+- Actualizada página `Challenges.tsx` con implementación funcional:
+  - Sección de desafíos activos con barras de progreso
+  - Lista de desafíos disponibles con imágenes
+  - Sistema de aceptación de desafíos con validación
+  - Estados de carga con skeletons
+  - Integración completa con React Query para cache y sincronización
+
+#### Impacto
+- Los usuarios ahora pueden ver desafíos disponibles desde la base de datos
+- Sistema funcional de aceptación de desafíos
+- Visualización en tiempo real del progreso de desafíos activos
+- Base sólida para integrar otorgamiento de XP
+
+---
+
 ### Contexto Inicial
 Se inició el desarrollo de Bubble, una aplicación de asistente conversacional con IA y elementos de gamificación. El objetivo principal era crear una experiencia de chat atractiva que motivara el uso continuo mediante desafíos y recompensas.
 

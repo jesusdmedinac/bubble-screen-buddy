@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 30%
+**Progreso general del plan actual**: 45%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 15%
+- Fase 2: 35%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -37,8 +37,8 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 ---
 
-### 🔄 Fase 2: Implementación de Gamificación — 15%
-**Estado**: En progreso (15%)  
+### 🔄 Fase 2: Implementación de Gamificación — 35%
+**Estado**: En progreso (35%)  
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
@@ -56,17 +56,21 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
   - `add_xp_to_user(user_id, xp_amount)`: Actualiza XP y nivel
   - `update_user_streak(user_id)`: Gestiona rachas diarias
 - ✅ Fix de seguridad: `search_path` configurado en funciones
+- ✅ Sistema de desafíos frontend implementado:
+  - ✅ Hook `useChallenges.ts` con queries y mutations para gestión de desafíos
+  - ✅ Página de Desafíos con lista de desafíos disponibles
+  - ✅ Visualización de desafíos activos del usuario con barra de progreso
+  - ✅ Sistema de aceptación de desafíos funcional
 
 #### En Progreso
-- 🔄 Implementación de UI para sistema de desafíos
+- 🔄 Integración de actualización de progreso de desafíos
+- 🔄 Sistema de otorgamiento de XP al completar desafíos
 
 #### Pendiente Inmediato
-- ⏳ Implementar página de Desafíos con lista de desafíos activos
-- ⏳ Sistema de aceptación y tracking de desafíos
 - ⏳ UI de página de Recompensas con inventario
 - ⏳ Sistema de canje de XP por recompensas
 - ⏳ Actualización de página de Perfil con estadísticas de gamificación
-- ⏳ Integrar otorgamiento de XP en acciones del usuario
+- ⏳ Integrar otorgamiento de XP en acciones del usuario (chat, actividades)
 
 #### Bloqueadores
 Ninguno actualmente
@@ -101,6 +105,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ### Componentes
 - **Páginas**: 5 (Chat, Desafíos, Recompensas, Perfil, Auth)
 - **Componentes compartidos**: 3 (BottomNav, PremiumModal, ProtectedRoute)
+- **Hooks personalizados**: 2 (useChallenges, use-mobile)
 - **Componentes UI (shadcn)**: ~40
 
 ### Autenticación
@@ -111,9 +116,9 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Implementar UI de página de Desafíos
-   - Sistema de aceptación y tracking de desafíos
-   - Integrar otorgamiento de XP en acciones
+   - Completar sistema de otorgamiento de XP al completar desafíos
+   - Integrar otorgamiento de XP en acciones del chat
+   - Actualizar perfil con visualización de estadísticas
 
 2. **Corto Plazo** (Próximas 2 semanas)
    - Desarrollar UI de página de Recompensas
