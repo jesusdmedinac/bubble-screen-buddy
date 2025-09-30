@@ -7,7 +7,9 @@ import Chat from "./pages/Chat";
 import Challenges from "./pages/Challenges";
 import Rewards from "./pages/Rewards";
 import Profile from "./pages/Profile";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -18,10 +20,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Chat />} />
-          <Route path="/desafios" element={<Challenges />} />
-          <Route path="/recompensas" element={<Rewards />} />
-          <Route path="/perfil" element={<Profile />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+          <Route path="/desafios" element={<ProtectedRoute><Challenges /></ProtectedRoute>} />
+          <Route path="/recompensas" element={<ProtectedRoute><Rewards /></ProtectedRoute>} />
+          <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

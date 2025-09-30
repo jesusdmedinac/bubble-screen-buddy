@@ -3,13 +3,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 import BottomNav from "@/components/BottomNav";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [name, setName] = useState("Sophia");
   const [age, setAge] = useState("25");
   const [email, setEmail] = useState("sophia@example.com");
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    
+    if (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo cerrar sesión",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión correctamente",
+      });
+      navigate("/auth");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -84,6 +105,14 @@ const Profile = () => {
 
           <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-full h-14 text-base font-semibold mt-8">
             Guardar cambios
+          </Button>
+
+          <Button 
+            variant="outline" 
+            className="w-full rounded-full h-14 text-base font-semibold mt-4"
+            onClick={handleLogout}
+          >
+            Cerrar sesión
           </Button>
         </div>
       </div>
