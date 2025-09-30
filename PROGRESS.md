@@ -32,25 +32,35 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 ---
 
 ### 🔄 Fase 2: Implementación de Gamificación
-**Estado**: En progreso (0%)  
+**Estado**: En progreso (15%)  
 **Iniciada el**: 2025-09-30
 
+#### Completado Recientemente
+- ✅ Diseño e implementación del esquema de base de datos para gamificación
+  - ✅ Tabla `challenge_templates` (catálogo de desafíos disponibles)
+  - ✅ Tabla `user_challenges` (progreso de desafíos por usuario)
+  - ✅ Tabla `reward_templates` (catálogo de recompensas disponibles)
+  - ✅ Tabla `user_rewards` (recompensas reclamadas por usuario)
+  - ✅ Actualización de `profiles` con campos: xp, level, streak_days, last_activity_date
+- ✅ Migración de base de datos ejecutada exitosamente
+- ✅ RLS policies configuradas para todas las tablas de gamificación
+- ✅ Seed data inicial: 6 desafíos y 5 recompensas
+- ✅ Funciones de base de datos implementadas:
+  - `calculate_level(xp_amount)`: Calcula nivel basado en XP
+  - `add_xp_to_user(user_id, xp_amount)`: Actualiza XP y nivel
+  - `update_user_streak(user_id)`: Gestiona rachas diarias
+- ✅ Fix de seguridad: `search_path` configurado en funciones
+
 #### En Progreso
-- 🔄 Definición de estructura de datos para desafíos y recompensas
+- 🔄 Implementación de UI para sistema de desafíos
 
 #### Pendiente Inmediato
-- ⏳ Diseño de esquema de base de datos para gamificación
-  - Tabla `challenges` (id, title, description, type, reward_xp, icon)
-  - Tabla `user_challenges` (user_id, challenge_id, status, completed_at)
-  - Tabla `rewards` (id, title, description, cost_xp, icon, type)
-  - Tabla `user_rewards` (user_id, reward_id, claimed_at)
-  - Actualizar `profiles` con campos: xp, level, streak_days, last_activity_date
-
-- ⏳ Migración de base de datos con nuevas tablas
-- ⏳ Implementación de lógica de backend para desafíos
-- ⏳ UI de página de Desafíos
-- ⏳ UI de página de Recompensas
-- ⏳ Actualización de página de Perfil con estadísticas
+- ⏳ Implementar página de Desafíos con lista de desafíos activos
+- ⏳ Sistema de aceptación y tracking de desafíos
+- ⏳ UI de página de Recompensas con inventario
+- ⏳ Sistema de canje de XP por recompensas
+- ⏳ Actualización de página de Perfil con estadísticas de gamificación
+- ⏳ Integrar otorgamiento de XP en acciones del usuario
 
 #### Bloqueadores
 Ninguno actualmente
@@ -76,9 +86,10 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Métricas Técnicas Actuales
 
 ### Base de Datos
-- **Tablas activas**: 2 (`profiles`, `chat_messages`)
-- **RLS policies**: Configuradas y funcionando
+- **Tablas activas**: 7 (`profiles`, `chat_messages`, `challenge_templates`, `user_challenges`, `reward_templates`, `user_rewards`, `screen_time_logs`)
+- **RLS policies**: Configuradas y funcionando en todas las tablas
 - **Triggers**: 1 (`on_auth_user_created`)
+- **Funciones de DB**: 4 (`handle_updated_at`, `handle_new_user`, `calculate_level`, `add_xp_to_user`, `update_user_streak`)
 - **Edge functions**: 1 (`chat-with-ai`)
 
 ### Componentes
@@ -94,19 +105,19 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Diseñar esquema completo de gamificación
-   - Crear migración de base de datos
-   - Implementar tablas y RLS policies
+   - Implementar UI de página de Desafíos
+   - Sistema de aceptación y tracking de desafíos
+   - Integrar otorgamiento de XP en acciones
 
 2. **Corto Plazo** (Próximas 2 semanas)
-   - Implementar lógica de asignación de desafíos
-   - Desarrollar UI de página de Desafíos
-   - Implementar sistema de puntos (XP)
+   - Desarrollar UI de página de Recompensas
+   - Sistema de canje de recompensas
+   - Actualizar perfil con estadísticas de gamificación
 
 3. **Medio Plazo** (Próximo mes)
-   - Completar sistema de recompensas
-   - Sistema de rachas (streaks)
-   - Actualizar perfil con estadísticas
+   - Notificaciones de logros
+   - Sistema de rachas visualizado
+   - Mejoras de UX en gamificación
 
 ## Notas de Desarrollo
 

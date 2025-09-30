@@ -30,25 +30,25 @@ Completar el MVP funcional de Bubble con chat IA operativo y bases de gamificaci
 ### Objetivos Principales
 
 #### 2.1 Sistema de Desafíos
-- [ ] Definir tipos de desafíos (diarios, semanales, especiales)
-- [ ] Crear tabla `challenges` en la base de datos
-- [ ] Crear tabla `user_challenges` para tracking
+- [x] Definir tipos de desafíos (diarios, semanales, especiales)
+- [x] Crear tabla `challenge_templates` en la base de datos
+- [x] Crear tabla `user_challenges` para tracking
 - [ ] Implementar lógica de asignación de desafíos
 - [ ] UI para mostrar desafíos activos y completados
 - [ ] Sistema de validación de completado
 
 #### 2.2 Sistema de Recompensas
-- [ ] Definir tipos de recompensas (puntos, badges, items)
-- [ ] Crear tabla `rewards` en la base de datos
-- [ ] Crear tabla `user_rewards` para inventario
-- [ ] Implementar sistema de puntos (XP)
+- [x] Definir tipos de recompensas (puntos, badges, items)
+- [x] Crear tabla `reward_templates` en la base de datos
+- [x] Crear tabla `user_rewards` para inventario
+- [x] Implementar sistema de puntos (XP)
 - [ ] UI para mostrar recompensas disponibles y desbloqueadas
 - [ ] Sistema de canje de puntos por recompensas
 
 #### 2.3 Sistema de Progreso de Usuario
-- [ ] Agregar campos a `profiles`: `xp`, `level`, `streak_days`
-- [ ] Implementar cálculo de nivel basado en XP
-- [ ] Sistema de rachas (streak) por uso diario
+- [x] Agregar campos a `profiles`: `xp`, `level`, `streak_days`, `last_activity_date`
+- [x] Implementar cálculo de nivel basado en XP
+- [x] Sistema de rachas (streak) por uso diario (funciones de DB)
 - [ ] Notificaciones de logros
 - [ ] Actualizar página de perfil con estadísticas
 

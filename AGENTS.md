@@ -15,11 +15,23 @@ El proyecto mantiene 4 documentos markdown que DEBES consultar y actualizar:
 
 ### Responsabilidades de Actualización
 
-**CRÍTICO**: Después de cada cambio significativo, DEBES actualizar los documentos relevantes:
+**CRÍTICO - OBLIGATORIO**: Después de cada cambio significativo, DEBES actualizar los documentos relevantes:
 
 - **PLAN.md**: Actualiza cuando se agreguen nuevas features o se cambie la dirección del desarrollo
+  - Marca tareas completadas con `[x]`
+  - Añade nuevas tareas si surgen durante el desarrollo
+  
 - **PROGRESS.md**: Actualiza SIEMPRE después de completar tareas o hacer cambios importantes
+  - Actualiza el porcentaje de progreso de la fase actual
+  - Mueve tareas de "Pendiente" a "Completado Recientemente"
+  - Actualiza métricas técnicas (número de tablas, funciones, etc.)
+  - Actualiza "Próximos Pasos" con el siguiente trabajo a realizar
+  
 - **HISTORY.md**: Registra cuando se complete un plan o se haga un cambio arquitectónico importante
+  - Documenta decisiones técnicas significativas
+  - Registra migraciones de base de datos importantes
+
+**REGLA DE ORO**: Si hiciste un cambio en el código, actualiza al menos PROGRESS.md. No hay excepciones.
 
 ## Sobre Bubble
 
@@ -96,10 +108,13 @@ Bubble es una aplicación de asistente AI conversacional con gamificación. Los 
 2. Mantén código limpio y bien organizado
 3. No hagas más de lo solicitado - mantén cambios mínimos y enfocados
 
-### Después de Cambios Importantes
-1. Actualiza PROGRESS.md con lo completado
-2. Si se completa un plan o cambia la dirección, actualiza HISTORY.md
-3. Si hay nuevos objetivos, actualiza PLAN.md
+### Después de Cambios Importantes (OBLIGATORIO)
+1. **SIEMPRE** actualiza PROGRESS.md con lo completado
+2. **SIEMPRE** marca tareas en PLAN.md como completadas `[x]`
+3. Si se completa una fase completa o cambia la dirección del proyecto, actualiza HISTORY.md
+4. Si surgen nuevos objetivos o tareas, actualízalos en PLAN.md
+
+**NUNCA** omitas este paso. Los markdown son la memoria del proyecto y deben reflejar siempre el estado actual.
 
 ## Debugging
 - Usa `lov-read-console-logs` para errores en consola
