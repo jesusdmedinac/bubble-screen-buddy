@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      challenge_templates: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          difficulty: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          reward_xp: number
+          title: string
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          reward_xp?: number
+          title: string
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          reward_xp?: number
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
       challenges: {
         Row: {
           completed: boolean | null
@@ -93,24 +129,69 @@ export type Database = {
           created_at: string | null
           email: string | null
           id: string
+          last_activity_date: string | null
+          level: number | null
           name: string | null
+          streak_days: number | null
           updated_at: string | null
+          xp: number | null
         }
         Insert: {
           age?: number | null
           created_at?: string | null
           email?: string | null
           id: string
+          last_activity_date?: string | null
+          level?: number | null
           name?: string | null
+          streak_days?: number | null
           updated_at?: string | null
+          xp?: number | null
         }
         Update: {
           age?: number | null
           created_at?: string | null
           email?: string | null
           id?: string
+          last_activity_date?: string | null
+          level?: number | null
           name?: string | null
+          streak_days?: number | null
           updated_at?: string | null
+          xp?: number | null
+        }
+        Relationships: []
+      }
+      reward_templates: {
+        Row: {
+          cost_xp: number
+          created_at: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          is_available: boolean | null
+          title: string
+          type: string
+        }
+        Insert: {
+          cost_xp?: number
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_available?: boolean | null
+          title: string
+          type: string
+        }
+        Update: {
+          cost_xp?: number
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_available?: boolean | null
+          title?: string
+          type?: string
         }
         Relationships: []
       }
@@ -190,12 +271,116 @@ export type Database = {
           },
         ]
       }
+      user_challenges: {
+        Row: {
+          accepted_at: string | null
+          challenge_id: string
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          progress: number | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          challenge_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          progress?: number | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          challenge_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          progress?: number | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenge_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_rewards: {
+        Row: {
+          claimed_at: string | null
+          created_at: string | null
+          id: string
+          reward_id: string
+          status: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          created_at?: string | null
+          id?: string
+          reward_id: string
+          status?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          created_at?: string | null
+          id?: string
+          reward_id?: string
+          status?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_rewards_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "reward_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_rewards_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      add_xp_to_user: {
+        Args: { p_user_id: string; xp_amount: number }
+        Returns: undefined
+      }
+      calculate_level: {
+        Args: { xp_amount: number }
+        Returns: number
+      }
+      update_user_streak: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
