@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 45%
+**Progreso general del plan actual**: 48%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 35%
+- Fase 2: 40%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -37,11 +37,12 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 ---
 
-### 🔄 Fase 2: Implementación de Gamificación — 35%
-**Estado**: En progreso (35%)  
+### 🔄 Fase 2: Implementación de Gamificación — 40%
+**Estado**: En progreso (40%)  
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
+- ✅ Integración de otorgamiento de XP automático al completar desafíos (RPC `add_xp_to_user`)
 - ✅ Diseño e implementación del esquema de base de datos para gamificación
   - ✅ Tabla `challenge_templates` (catálogo de desafíos disponibles)
   - ✅ Tabla `user_challenges` (progreso de desafíos por usuario)
@@ -64,7 +65,6 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 #### En Progreso
 - 🔄 Integración de actualización de progreso de desafíos
-- 🔄 Sistema de otorgamiento de XP al completar desafíos
 
 #### Pendiente Inmediato
 - ⏳ UI de página de Recompensas con inventario
@@ -116,7 +116,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Completar sistema de otorgamiento de XP al completar desafíos
+   - Completar integración de actualización de progreso de desafíos
    - Integrar otorgamiento de XP en acciones del chat
    - Actualizar perfil con visualización de estadísticas
 

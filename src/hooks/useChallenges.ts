@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import type { Tables } from "@/integrations/supabase/types";
+
+type UserChallengeWithTemplate = Tables<"user_challenges"> & {
+  challenge_templates: Tables<"challenge_templates"> | null;
+};
 
 export const useChallengeTemplates = () => {
   return useQuery({
@@ -35,7 +40,7 @@ export const useUserChallenges = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as UserChallengeWithTemplate[];
     },
   });
 };
@@ -84,22 +89,96 @@ export const useUpdateChallengeProgress = () => {
 
   return useMutation({
     mutationFn: async ({ challengeId, progress }: { challengeId: string; progress: number }) => {
-      const { data, error } = await supabase
+      const clampedProgress = Math.max(0, Math.min(progress, 100));
+
+      const [{ data: { user } }, existingChallenge] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase
+          .from("user_challenges")
+          .select(
+            `
+              *,
+              challenge_templates (*)
+            `
+          )
+          .eq("id", challengeId)
+          .single<UserChallengeWithTemplate>(),
+      ]);
+
+      if (!user) throw new Error("No authenticated user");
+
+      if (existingChallenge.error) throw existingChallenge.error;
+      if (!existingChallenge.data) throw new Error("Challenge not found");
+
+      const challenge = existingChallenge.data;
+      const wasAlreadyCompleted = challenge.status === "completed";
+      const newStatus = clampedProgress >= 100 ? "completed" : "active";
+      const newCompletedAt = clampedProgress >= 100 ? new Date().toISOString() : null;
+
+      const { data: updatedChallenge, error: updateError } = await supabase
         .from("user_challenges")
         .update({
-          progress,
-          status: progress >= 100 ? "completed" : "active",
-          completed_at: progress >= 100 ? new Date().toISOString() : null,
+          progress: clampedProgress,
+          status: newStatus,
+          completed_at: newCompletedAt,
         })
         .eq("id", challengeId)
-        .select()
-        .single();
+        .select(`
+          *,
+          challenge_templates (*)
+        `)
+        .single<UserChallengeWithTemplate>();
 
-      if (error) throw error;
-      return data;
+      if (updateError) throw updateError;
+      if (!updatedChallenge) throw new Error("Failed to update challenge");
+
+      let xpAwarded = 0;
+      const rewardXp = updatedChallenge.challenge_templates?.reward_xp ?? 0;
+
+      if (!wasAlreadyCompleted && newStatus === "completed" && rewardXp > 0) {
+        const { error: xpError } = await supabase.rpc("add_xp_to_user", {
+          p_user_id: user.id,
+          xp_amount: rewardXp,
+        });
+
+        if (xpError) {
+          await supabase
+            .from("user_challenges")
+            .update({
+              progress: challenge.progress ?? 0,
+              status: challenge.status,
+              completed_at: challenge.completed_at,
+            })
+            .eq("id", challengeId);
+          throw xpError;
+        }
+
+        xpAwarded = rewardXp;
+      }
+
+      return {
+        ...updatedChallenge,
+        xpAwarded,
+        challengeTitle: updatedChallenge.challenge_templates?.title ?? "Desafío",
+      };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["user-challenges"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+
+      if (data?.xpAwarded) {
+        toast({
+          title: "¡XP ganada!",
+          description: `Sumaste ${data.xpAwarded} XP por completar "${data.challengeTitle}"`,
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "No se pudo actualizar el desafío",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 };
