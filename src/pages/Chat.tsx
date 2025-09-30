@@ -6,6 +6,7 @@ import BottomNav from "@/components/BottomNav";
 import bubbleAvatar from "@/assets/bubble-avatar.png";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useChallengeProgressAutomation } from "@/hooks/useChallenges";
 
 interface Message {
   id: string;
@@ -20,6 +21,7 @@ const Chat = () => {
   const [isInitializing, setIsInitializing] = useState(true);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { processChatMessage } = useChallengeProgressAutomation();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -165,7 +167,7 @@ const Chat = () => {
     }
   };
 
-  const streamChat = async (userMessage: Message) => {
+  const streamChat = async (userMessage: Message, history: Message[]) => {
     const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-with-ai`;
     
     try {
@@ -187,7 +189,7 @@ const Chat = () => {
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ 
-          messages: [...messages, userMessage].map(m => ({ 
+          messages: history.map(m => ({ 
             role: m.role, 
             content: m.content 
           }))
@@ -319,11 +321,13 @@ const Chat = () => {
       content: input,
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput("");
     setIsLoading(true);
 
-    streamChat(userMessage);
+    void processChatMessage(updatedMessages);
+    streamChat(userMessage, updatedMessages);
   };
 
   return (

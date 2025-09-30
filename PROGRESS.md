@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 48%
+**Progreso general del plan actual**: 52%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 40%
+- Fase 2: 45%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -37,11 +37,12 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 ---
 
-### 🔄 Fase 2: Implementación de Gamificación — 40%
-**Estado**: En progreso (40%)  
+### 🔄 Fase 2: Implementación de Gamificación — 45%
+**Estado**: En progreso (45%)  
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
+- ✅ Automatización de progreso al 100% para desafíos según eventos del chat
 - ✅ Integración de otorgamiento de XP automático al completar desafíos (RPC `add_xp_to_user`)
 - ✅ Diseño e implementación del esquema de base de datos para gamificación
   - ✅ Tabla `challenge_templates` (catálogo de desafíos disponibles)
@@ -64,13 +65,13 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
   - ✅ Sistema de aceptación de desafíos funcional
 
 #### En Progreso
-- 🔄 Integración de actualización de progreso de desafíos
+- 🔄 Extender reglas de progreso automático a desafíos adicionales (rachas, actividades guiadas)
 
 #### Pendiente Inmediato
 - ⏳ UI de página de Recompensas con inventario
 - ⏳ Sistema de canje de XP por recompensas
 - ⏳ Actualización de página de Perfil con estadísticas de gamificación
-- ⏳ Integrar otorgamiento de XP en acciones del usuario (chat, actividades)
+- ⏳ Integrar otorgamiento de XP en actividades fuera del chat
 
 #### Bloqueadores
 Ninguno actualmente
@@ -105,7 +106,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ### Componentes
 - **Páginas**: 5 (Chat, Desafíos, Recompensas, Perfil, Auth)
 - **Componentes compartidos**: 3 (BottomNav, PremiumModal, ProtectedRoute)
-- **Hooks personalizados**: 2 (useChallenges, use-mobile)
+- **Hooks personalizados**: 3 (useChallenges, useChallengeProgressAutomation, use-mobile)
 - **Componentes UI (shadcn)**: ~40
 
 ### Autenticación
@@ -116,8 +117,8 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Completar integración de actualización de progreso de desafíos
-   - Integrar otorgamiento de XP en acciones del chat
+   - Diseñar reglas adicionales para desafíos semanales y de racha
+   - Integrar otorgamiento de XP en actividades fuera del chat
    - Actualizar perfil con visualización de estadísticas
 
 2. **Corto Plazo** (Próximas 2 semanas)

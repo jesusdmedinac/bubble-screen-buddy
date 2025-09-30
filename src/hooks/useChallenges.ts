@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -5,6 +6,80 @@ import type { Tables } from "@/integrations/supabase/types";
 
 type UserChallengeWithTemplate = Tables<"user_challenges"> & {
   challenge_templates: Tables<"challenge_templates"> | null;
+};
+
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+const normalizeText = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+const EMOTION_KEYWORDS = new Set(
+  [
+    "feliz",
+    "triste",
+    "ansioso",
+    "enojado",
+    "emocionado",
+    "calmado",
+    "agradecido",
+    "estresado",
+    "nervioso",
+    "motivado",
+    "contento",
+    "frustrado",
+    "confundido",
+    "aliviado",
+  ].map(normalizeText)
+);
+
+const countEmotionMentions = (messages: ChatMessage[]) => {
+  const found = new Set<string>();
+
+  for (const message of messages) {
+    if (message.role !== "user") continue;
+
+    const normalized = normalizeText(message.content);
+    const words = normalized.match(/[a-zñ]+/g) ?? [];
+
+    for (const word of words) {
+      if (EMOTION_KEYWORDS.has(word)) {
+        found.add(word);
+      }
+    }
+  }
+
+  return found.size;
+};
+
+const shouldCompleteChallenge = (
+  challenge: UserChallengeWithTemplate,
+  messages: ChatMessage[]
+): boolean => {
+  const title = challenge.challenge_templates?.title;
+  if (!title) return false;
+
+  const normalizedTitle = normalizeText(title);
+
+  if (normalizedTitle.includes("primera conversacion")) {
+    return messages.some((message) => message.role === "user");
+  }
+
+  if (normalizedTitle.includes("conversacion profunda")) {
+    const userMessages = messages.filter((message) => message.role === "user").length;
+    return userMessages >= 10;
+  }
+
+  if (normalizedTitle.includes("explorador emocional")) {
+    return countEmotionMentions(messages) >= 3;
+  }
+
+  return false;
 };
 
 export const useChallengeTemplates = () => {
@@ -181,4 +256,51 @@ export const useUpdateChallengeProgress = () => {
       });
     },
   });
+};
+
+export const useChallengeProgressAutomation = () => {
+  const { mutateAsync: updateProgress, isPending } = useUpdateChallengeProgress();
+
+  const processChatMessage = useCallback(
+    async (messages: ChatMessage[]) => {
+      if (!messages.length) return;
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data, error } = await supabase
+          .from("user_challenges")
+          .select(`
+            *,
+            challenge_templates (*)
+          `)
+          .eq("user_id", user.id)
+          .in("status", ["active", "in_progress"]);
+
+        if (error) throw error;
+        if (!data || data.length === 0) return;
+
+        for (const rawChallenge of data as UserChallengeWithTemplate[]) {
+          if ((rawChallenge.progress ?? 0) >= 100) continue;
+
+          const eligible = shouldCompleteChallenge(rawChallenge, messages);
+          if (!eligible) continue;
+
+          await updateProgress({
+            challengeId: rawChallenge.id,
+            progress: 100,
+          });
+        }
+      } catch (err) {
+        console.error("Error procesando progreso de desafíos:", err);
+      }
+    },
+    [updateProgress]
+  );
+
+  return {
+    processChatMessage,
+    isProcessingChallenge: isPending,
+  };
 };
