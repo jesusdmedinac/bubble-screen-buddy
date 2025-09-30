@@ -31,7 +31,10 @@ El proyecto mantiene 4 documentos markdown que DEBES consultar y actualizar:
   - Documenta decisiones técnicas significativas
   - Registra migraciones de base de datos importantes
 
-**REGLA DE ORO**: Si hiciste un cambio en el código, actualiza al menos PROGRESS.md. No hay excepciones.
+### REGLAS
+
+- Si hiciste un cambio en el código, actualiza al menos PROGRESS.md. No hay excepciones.
+- Debes sugerir un mensaje de commit en cada paso del desarrollo.
 
 ## Sobre Bubble
 
