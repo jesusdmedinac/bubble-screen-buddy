@@ -13,6 +13,11 @@ type ChatMessage = {
   content: string;
 };
 
+type ActivityEvent = {
+  type: "daily_check_in" | "guided_reflection" | "breathing_exercise" | "custom";
+  metadata?: Record<string, unknown>;
+};
+
 type UserProfile = Tables<"profiles">;
 
 const normalizeText = (value: string) =>
@@ -81,13 +86,35 @@ const countEmotionMentions = (messages: ChatMessage[]) => {
 const shouldCompleteChallenge = (
   challenge: UserChallengeWithTemplate,
   messages: ChatMessage[],
-  profile: UserProfile | null
+  profile: UserProfile | null,
+  activity?: ActivityEvent
 ): boolean => {
   const title = challenge.challenge_templates?.title;
   const type = challenge.challenge_templates?.type;
   if (!title) return false;
 
   const normalizedTitle = normalizeText(title);
+
+  if (activity) {
+    if (activity.type === "guided_reflection") {
+      if (normalizedTitle.includes("reflexion")) {
+        return true;
+      }
+    }
+
+    if (activity.type === "breathing_exercise") {
+      if (normalizedTitle.includes("calma") || normalizedTitle.includes("respiracion")) {
+        return true;
+      }
+    }
+
+    if (activity.type === "custom") {
+      const targetId = activity.metadata?.challengeId;
+      if (typeof targetId === "string") {
+        return challenge.challenge_id === targetId || challenge.id === targetId;
+      }
+    }
+  }
 
   if (normalizedTitle.includes("primera conversacion")) {
     return messages.some((message) => message.role === "user");
@@ -110,7 +137,7 @@ const shouldCompleteChallenge = (
     return (profile?.streak_days ?? 0) >= 7;
   }
 
-  if (type === "weekly" || normalizedTitle.includes("reflexion") || normalizedTitle.includes("reflexion")) {
+  if (type === "weekly" || normalizedTitle.includes("reflexion")) {
     const reflectionMatches = new Set<string>();
     let longResponses = 0;
 
@@ -312,12 +339,19 @@ export const useUpdateChallengeProgress = () => {
   });
 };
 
+type EvaluationContext = {
+  messages?: ChatMessage[];
+  activity?: ActivityEvent;
+};
+
 export const useChallengeProgressAutomation = () => {
   const { mutateAsync: updateProgress, isPending } = useUpdateChallengeProgress();
 
-  const processChatMessage = useCallback(
-    async (messages: ChatMessage[]) => {
-      if (!messages.length) return;
+  const evaluateChallenges = useCallback(
+    async ({ messages = [], activity }: EvaluationContext) => {
+      if ((!messages || messages.length === 0) && !activity) {
+        return;
+      }
 
       try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -355,10 +389,12 @@ export const useChallengeProgressAutomation = () => {
 
         if (!challenges || challenges.length === 0) return;
 
+        const safeMessages = messages ?? [];
+
         for (const rawChallenge of challenges) {
           if ((rawChallenge.progress ?? 0) >= 100) continue;
 
-          const eligible = shouldCompleteChallenge(rawChallenge, messages, profile);
+          const eligible = shouldCompleteChallenge(rawChallenge, safeMessages, profile, activity);
           if (!eligible) continue;
 
           await updateProgress({
@@ -373,8 +409,23 @@ export const useChallengeProgressAutomation = () => {
     [updateProgress]
   );
 
+  const processChatMessage = useCallback(
+    async (messages: ChatMessage[]) => {
+      await evaluateChallenges({ messages });
+    },
+    [evaluateChallenges]
+  );
+
+  const processActivityEvent = useCallback(
+    async (activity: ActivityEvent) => {
+      await evaluateChallenges({ activity });
+    },
+    [evaluateChallenges]
+  );
+
   return {
     processChatMessage,
+    processActivityEvent,
     isProcessingChallenge: isPending,
   };
 };

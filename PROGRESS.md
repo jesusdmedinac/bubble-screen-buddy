@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 52%
+**Progreso general del plan actual**: 55%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 45%
+- Fase 2: 48%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -43,6 +43,7 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 #### Completado Recientemente
 - ✅ Automatización de progreso al 100% para desafíos diarios, semanales y de racha desde eventos del chat (incluye actualización de streak y XP)
+- ✅ Acciones rápidas en Perfil para registrar reflexión guiada y check-in diario con otorgamiento de XP y mantenimiento de racha
 - ✅ Integración de otorgamiento de XP automático al completar desafíos (RPC `add_xp_to_user`)
 - ✅ Diseño e implementación del esquema de base de datos para gamificación
   - ✅ Tabla `challenge_templates` (catálogo de desafíos disponibles)
@@ -71,7 +72,7 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 - ⏳ UI de página de Recompensas con inventario
 - ⏳ Sistema de canje de XP por recompensas
 - ⏳ Actualización de página de Perfil con estadísticas de gamificación
-- ⏳ Integrar otorgamiento de XP en actividades fuera del chat
+- ⏳ Definir triggers adicionales para actividades guiadas y logros especiales
 
 #### Bloqueadores
 Ninguno actualmente
@@ -117,9 +118,9 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Integrar otorgamiento de XP en actividades fuera del chat
    - Actualizar perfil con visualización de estadísticas
-   - Definir triggers para actividades guiadas y logros especiales
+   - Definir triggers para actividades guiadas y logros especiales adicionales
+   - Diseñar UI funcional para canje de recompensas utilizando XP
 
 2. **Corto Plazo** (Próximas 2 semanas)
    - Desarrollar UI de página de Recompensas

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import BottomNav from "@/components/BottomNav";
+import { useChallengeProgressAutomation } from "@/hooks/useChallenges";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -13,6 +14,41 @@ const Profile = () => {
   const [name, setName] = useState("Sophia");
   const [age, setAge] = useState("25");
   const [email, setEmail] = useState("sophia@example.com");
+  const { processActivityEvent, isProcessingChallenge } = useChallengeProgressAutomation();
+
+  const handleGuidedReflection = async () => {
+    try {
+      await processActivityEvent({ type: "guided_reflection" });
+      toast({
+        title: "Reflexión guiada completada",
+        description: "Se registró tu sesión y ganaste XP.",
+      });
+    } catch (error) {
+      console.error("No se pudo registrar la reflexión guiada:", error);
+      toast({
+        title: "Error",
+        description: "No pudimos registrar la actividad. Intenta de nuevo.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDailyCheckIn = async () => {
+    try {
+      await processActivityEvent({ type: "daily_check_in" });
+      toast({
+        title: "Check-in diario registrado",
+        description: "Tu racha y XP fueron actualizados.",
+      });
+    } catch (error) {
+      console.error("No se pudo registrar el check-in diario:", error);
+      toast({
+        title: "Error",
+        description: "No pudimos registrar tu check-in. Intenta más tarde.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -114,6 +150,32 @@ const Profile = () => {
           >
             Cerrar sesión
           </Button>
+        </div>
+
+        <div className="space-y-4 bg-card border border-border rounded-3xl p-6">
+          <div className="space-y-1">
+            <h3 className="text-xl font-semibold text-foreground">Actividades guiadas</h3>
+            <p className="text-sm text-muted-foreground">
+              Registra tus hábitos positivos para mantener la racha y sumar XP.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <Button
+              className="w-full rounded-full h-14 text-base font-semibold bg-teal hover:bg-teal/90 text-background"
+              onClick={handleGuidedReflection}
+              disabled={isProcessingChallenge}
+            >
+              Registrar reflexión guiada
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full rounded-full h-14 text-base font-semibold"
+              onClick={handleDailyCheckIn}
+              disabled={isProcessingChallenge}
+            >
+              Check-in diario completado
+            </Button>
+          </div>
         </div>
       </div>
 
