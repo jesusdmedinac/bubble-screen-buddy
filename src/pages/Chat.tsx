@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import BottomNav from "@/components/BottomNav";
 import bubbleAvatar from "@/assets/bubble-avatar.png";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
@@ -28,91 +29,157 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Generate initial AI greeting
+  // Load previous chat messages from database
   useEffect(() => {
-    const generateInitialGreeting = async () => {
-      const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-with-ai`;
-      
+    const loadChatHistory = async () => {
       try {
-        const resp = await fetch(CHAT_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ 
-            messages: [{
-              role: "user",
-              content: "Genera un mensaje de bienvenida cálido, breve y empático para comenzar nuestra conversación. Preséntate como Bubble y pregúntame cómo puedes ayudarme hoy con el uso de mi teléfono. Máximo 2-3 líneas."
-            }]
-          }),
-        });
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
 
-        if (!resp.ok || !resp.body) {
-          throw new Error("Error al generar mensaje inicial");
-        }
+        const { data: chatHistory, error } = await supabase
+          .from('chat_messages')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: true });
 
-        const reader = resp.body.getReader();
-        const decoder = new TextDecoder();
-        let textBuffer = "";
-        let streamDone = false;
-        let assistantContent = "";
+        if (error) throw error;
 
-        const assistantId = "initial-greeting";
-        setMessages([{ id: assistantId, role: "assistant", content: "" }]);
-
-        while (!streamDone) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          textBuffer += decoder.decode(value, { stream: true });
-
-          let newlineIndex: number;
-          while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
-            let line = textBuffer.slice(0, newlineIndex);
-            textBuffer = textBuffer.slice(newlineIndex + 1);
-
-            if (line.endsWith("\r")) line = line.slice(0, -1);
-            if (line.startsWith(":") || line.trim() === "") continue;
-            if (!line.startsWith("data: ")) continue;
-
-            const jsonStr = line.slice(6).trim();
-            if (jsonStr === "[DONE]") {
-              streamDone = true;
-              break;
-            }
-
-            try {
-              const parsed = JSON.parse(jsonStr);
-              const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-              if (content) {
-                assistantContent += content;
-                setMessages([{ id: assistantId, role: "assistant", content: assistantContent }]);
-              }
-            } catch {
-              textBuffer = line + "\n" + textBuffer;
-              break;
-            }
-          }
+        if (chatHistory && chatHistory.length > 0) {
+          // If there are previous messages, load them
+          setMessages(chatHistory.map(msg => ({
+            id: msg.id,
+            role: msg.role as "user" | "assistant",
+            content: msg.content
+          })));
+          setIsInitializing(false);
+        } else {
+          // If no previous messages, generate initial greeting
+          await generateInitialGreeting();
         }
       } catch (error) {
-        console.error("Error generando saludo inicial:", error);
-        setMessages([{
-          id: "fallback",
-          role: "assistant",
-          content: "Hola, soy Bubble. Estoy aquí para ayudarte. ¿Cómo puedo asistirte hoy?"
-        }]);
-      } finally {
-        setIsInitializing(false);
+        console.error("Error cargando historial:", error);
+        await generateInitialGreeting();
       }
     };
 
-    generateInitialGreeting();
+    loadChatHistory();
   }, []);
+
+  const generateInitialGreeting = async () => {
+    const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-with-ai`;
+    
+    try {
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ 
+          messages: [{
+            role: "user",
+            content: "Genera un mensaje de bienvenida cálido, breve y empático para comenzar nuestra conversación. Preséntate como Bubble y pregúntame cómo puedes ayudarme hoy con el uso de mi teléfono. Máximo 2-3 líneas."
+          }]
+        }),
+      });
+
+      if (!resp.ok || !resp.body) {
+        throw new Error("Error al generar mensaje inicial");
+      }
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let streamDone = false;
+      let assistantContent = "";
+
+      const assistantId = crypto.randomUUID();
+      setMessages([{ id: assistantId, role: "assistant", content: "" }]);
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") {
+            streamDone = true;
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              assistantContent += content;
+              setMessages([{ id: assistantId, role: "assistant", content: assistantContent }]);
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
+      // Save initial greeting to database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && assistantContent) {
+        await supabase.from('chat_messages').insert({
+          id: assistantId,
+          user_id: user.id,
+          role: 'assistant',
+          content: assistantContent
+        });
+      }
+    } catch (error) {
+      console.error("Error generando saludo inicial:", error);
+      const fallbackId = crypto.randomUUID();
+      const fallbackContent = "Hola, soy Bubble. Estoy aquí para ayudarte. ¿Cómo puedo asistirte hoy?";
+      setMessages([{
+        id: fallbackId,
+        role: "assistant",
+        content: fallbackContent
+      }]);
+      
+      // Save fallback to database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from('chat_messages').insert({
+          id: fallbackId,
+          user_id: user.id,
+          role: 'assistant',
+          content: fallbackContent
+        });
+      }
+    } finally {
+      setIsInitializing(false);
+    }
+  };
 
   const streamChat = async (userMessage: Message) => {
     const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-with-ai`;
     
     try {
+      // Save user message to database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from('chat_messages').insert({
+          id: userMessage.id,
+          user_id: user.id,
+          role: userMessage.role,
+          content: userMessage.content
+        });
+      }
+
       const resp = await fetch(CHAT_URL, {
         method: "POST",
         headers: {
@@ -156,7 +223,7 @@ const Chat = () => {
       let assistantContent = "";
 
       // Crear mensaje del asistente vacío
-      const assistantId = (Date.now() + 1).toString();
+      const assistantId = crypto.randomUUID();
       setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
       while (!streamDone) {
@@ -221,6 +288,16 @@ const Chat = () => {
         }
       }
 
+      // Save assistant message to database
+      if (user && assistantContent) {
+        await supabase.from('chat_messages').insert({
+          id: assistantId,
+          user_id: user.id,
+          role: 'assistant',
+          content: assistantContent
+        });
+      }
+
     } catch (error) {
       console.error("Error en streaming:", error);
       toast({
@@ -237,7 +314,7 @@ const Chat = () => {
     if (!input.trim() || isLoading || isInitializing) return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       role: "user",
       content: input,
     };
