@@ -13,13 +13,20 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-      
-      if (!session) {
+    // Validate user exists on server (not just local session)
+    supabase.auth.getUser().then(({ data: { user }, error }) => {
+      if (error || !user) {
+        // User doesn't exist or session is invalid, clear it
+        supabase.auth.signOut();
+        setSession(null);
+        setLoading(false);
         navigate('/auth');
+      } else {
+        // Get the full session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setSession(session);
+          setLoading(false);
+        });
       }
     });
 
