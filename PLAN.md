@@ -52,6 +52,26 @@ Completar el MVP funcional de Bubble con chat IA operativo y bases de gamificaci
 - [ ] Notificaciones de logros
 - [ ] Actualizar página de perfil con estadísticas
 
+## Iniciativa Paralela: Renderizado Markdown en Chat
+**Estado**: Planificado  
+**Prioridad**: Media
+
+### Objetivo
+Habilitar soporte seguro de Markdown en los mensajes del chat para mejorar la expresividad de Bubble y de los usuarios (listas, énfasis, enlaces y bloques de código) manteniendo una experiencia consistente con el sistema de diseño.
+
+### Plan de Ejecución
+1. **Alcance y requisitos**: Definir qué elementos Markdown se soportarán (títulos ligeros, énfasis, listas, enlaces, citas, código) y documentar reglas de fallback para texto plano y streaming parcial.
+2. **Infraestructura de renderizado**: Evaluar e instalar librerías (`react-markdown`, `remark-gfm`, `rehype-sanitize`) o equivalente ligera; configurar sanitización estricta y limitar nodos inseguros (scripts, iframes, HTML crudo).
+3. **Componente UI**: Crear un componente `MarkdownMessage` reutilizable que reciba `content` y `role`, aplique tokens semánticos para colores/typography y adapte layout móvil; ajustar `Chat.tsx` para usarlo en mensajes del usuario y asistente.
+4. **Compatibilidad con streaming y almacenamiento**: Ajustar lógica de streaming para renderizar incrementalmente sin bloquear la UI, asegurando que el contenido final almacenado sigue siendo texto Markdown plano sin artefactos; agregar migraciones solo si surgen nuevos metadatos (por ejemplo, flags de formato).
+5. **QA y validación**: Cubrir casos con pruebas unitarias/componentes (render de listas, código, enlaces), QA manual con mensajes largos y mezcla de Markdown, y verificar compatibilidad en navegadores móviles; añadir documentación breve en `README.md` sobre uso de Markdown.
+
+### Definición de Hecho
+- Mensajes renderizan Markdown soportado con estilos alineados al sistema de diseño.
+- Sanitización evita inyecciones o HTML arbitrario tanto de usuario como de Bubble.
+- Streaming mantiene rendimiento aceptable (<100ms por frame) y no rompe formato final.
+- Documentación y ejemplos actualizados para el equipo.
+
 ## Fase 3: Mejoras de Experiencia (Futuro)
 **Estado**: Planificado  
 **Prioridad**: Media

@@ -114,6 +114,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 - Se decidió usar `getUser()` en lugar de solo `getSession()` para validar sesiones en servidor
 - Se mantiene el patrón de auto-creación de perfiles con triggers
 - Sistema de diseño basado en tokens semánticos HSL
+- Se definió plan para incorporar renderizado Markdown seguro en el chat, pendiente de ejecución
 
 ### Deuda Técnica
 - Ninguna crítica identificada actualmente
