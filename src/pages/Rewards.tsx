@@ -1,43 +1,82 @@
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
+import { ArrowLeft, Gift, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import BottomNav from "@/components/BottomNav";
-import giftImg from "@/assets/reward-gift.png";
-import coachingImg from "@/assets/coaching-session.png";
+import { useProfileStats } from "@/hooks/useProfileStats";
+import {
+  useRewardTemplates,
+  useUserRewards,
+  useRedeemReward,
+} from "@/hooks/useRewards";
+
+const formatNumber = (value: number) => new Intl.NumberFormat("es-ES").format(value);
+
+const typeTranslations: Record<string, string> = {
+  permanent: "Permanente",
+  consumable: "Consumible",
+};
+
+const statusTranslations: Record<string, string> = {
+  claimed: "Canjeada",
+  used: "Usada",
+  expired: "Expirada",
+};
 
 const Rewards = () => {
   const navigate = useNavigate();
+  const { data: stats, isLoading: isStatsLoading, isError: isStatsError, error: statsError } =
+    useProfileStats();
+  const {
+    data: templates,
+    isLoading: isTemplatesLoading,
+    isError: isTemplatesError,
+    error: templatesError,
+  } = useRewardTemplates();
+  const {
+    data: userRewards,
+    isLoading: isUserRewardsLoading,
+    isError: isUserRewardsError,
+    error: userRewardsError,
+  } = useUserRewards();
+  const redeemReward = useRedeemReward();
+  const [pendingRewardId, setPendingRewardId] = useState<string | null>(null);
 
-  const rewards = [
-    {
-      id: 1,
-      title: "Descuento del 10%",
-      description: "Canjea tus puntos por un descuento en tu próxima compra.",
-      points: 500,
-      image: giftImg,
-      color: "bg-gradient-to-br from-red-700 to-red-900",
-    },
-    {
-      id: 2,
-      title: "Acceso premium de un mes",
-      description: "Disfruta de todas las funciones premium durante un mes.",
-      points: 1000,
-      image: giftImg,
-      color: "bg-gradient-to-br from-purple-700 to-purple-900",
-    },
-    {
-      id: 3,
-      title: "Sesión de coaching",
-      description: "Obtén una sesión personalizada para mejorar tu productividad.",
-      points: 2000,
-      image: coachingImg,
-      color: "bg-gradient-to-br from-violet-700 to-violet-900",
-    },
-  ];
+  const totalXp = stats?.xp ?? 0;
+  const formattedXp = formatNumber(totalXp);
+
+  const availableRewards = useMemo(() => templates ?? [], [templates]);
+  const claimedRewards = useMemo(() => userRewards ?? [], [userRewards]);
+
+  const handleRedeem = async (rewardId: string) => {
+    try {
+      setPendingRewardId(rewardId);
+      await redeemReward.mutateAsync({ rewardId });
+    } finally {
+      setPendingRewardId(null);
+    }
+  };
+
+  const renderError = (title: string, description: string) => (
+    <Alert variant="destructive">
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription>{description}</AlertDescription>
+    </Alert>
+  );
+
+  const renderRewardsSkeleton = () => (
+    <div className="space-y-4">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Skeleton key={index} className="h-40 rounded-3xl" />
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      {/* Header */}
       <header className="flex items-center gap-4 px-6 py-4 border-b border-border bg-card">
         <Button
           variant="ghost"
@@ -50,47 +89,161 @@ const Rewards = () => {
         <h1 className="text-2xl font-bold">Recompensas</h1>
       </header>
 
-      {/* Content */}
       <div className="px-6 py-8 space-y-8">
-        {/* Points Display */}
-        <div>
-          <h2 className="text-lg text-muted-foreground mb-3">Tus puntos</h2>
-          <div className="bg-secondary rounded-3xl px-8 py-6">
-            <p className="text-5xl font-bold">
-              1,250 <span className="text-2xl text-muted-foreground">puntos</span>
-            </p>
-          </div>
-        </div>
+        <section>
+          <h2 className="text-lg text-muted-foreground mb-3">Tu XP disponible</h2>
+          {isStatsError
+            ? renderError(
+                "No pudimos obtener tu XP",
+                statsError instanceof Error ? statsError.message : "Intenta más tarde."
+              )
+            : isStatsLoading || !stats
+            ? (
+                <Skeleton className="h-24 rounded-3xl" />
+              )
+            : (
+                <div className="bg-card border border-border rounded-3xl px-6 py-5 shadow-sm">
+                  <p className="text-sm text-muted-foreground">Saldo actual</p>
+                  <p className="mt-2 text-4xl font-bold text-foreground">
+                    {formattedXp} <span className="text-lg text-muted-foreground">XP</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Recompensas desbloqueadas: {stats.rewardCounts.claimed + stats.rewardCounts.used}
+                  </p>
+                </div>
+              )}
+        </section>
 
-        {/* Rewards List */}
-        <div>
-          <h2 className="text-2xl font-bold mb-6">Canjear Recompensas</h2>
-          <div className="space-y-6">
-            {rewards.map((reward) => (
-              <div
-                key={reward.id}
-                className="rounded-3xl overflow-hidden shadow-elevated transition-transform hover:scale-[1.02]"
-              >
-                <div className="h-48 overflow-hidden bg-accent/20">
-                  <img
-                    src={reward.image}
-                    alt={reward.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className={`p-6 space-y-3 ${reward.color}`}>
-                  <h3 className="text-xl font-bold text-white">{reward.title}</h3>
-                  <p className="text-white/90 text-sm leading-relaxed">{reward.description}</p>
-                  <Button 
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-8 py-6 font-semibold"
-                  >
-                    Canjear por {reward.points}
-                  </Button>
-                </div>
-              </div>
-            ))}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Gift className="h-5 w-5 text-accent" />
+            <h2 className="text-xl font-semibold text-foreground">Recompensas disponibles</h2>
           </div>
-        </div>
+
+          {isTemplatesError
+            ? renderError(
+                "No pudimos cargar las recompensas",
+                templatesError instanceof Error ? templatesError.message : "Intenta nuevamente."
+              )
+            : isTemplatesLoading
+            ? renderRewardsSkeleton()
+            : availableRewards.length === 0
+            ? (
+                <div className="bg-card border border-dashed border-border rounded-3xl p-6 text-center text-muted-foreground">
+                  Aún no hay recompensas disponibles. ¡Vuelve pronto!
+                </div>
+              )
+            : (
+                <div className="space-y-6">
+                  {availableRewards.map((reward) => {
+                    const cost = reward.cost_xp ?? 0;
+                    const canRedeem = totalXp >= cost && cost > 0;
+                    const isRedeeming = pendingRewardId === reward.id && redeemReward.isPending;
+
+                    return (
+                      <div
+                        key={reward.id}
+                        className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                              <span className="text-3xl" aria-hidden>
+                                {reward.icon ?? "🎁"}
+                              </span>
+                              <div>
+                                <h3 className="text-xl font-semibold text-foreground">
+                                  {reward.title}
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                  {reward.description ?? "Recompensa sin descripción"}
+                                </p>
+                              </div>
+                            </div>
+                            <Badge variant="secondary" className="w-fit">
+                              {typeTranslations[reward.type] ?? reward.type}
+                            </Badge>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-muted-foreground">Costo</p>
+                            <p className="text-xl font-semibold text-foreground">{formatNumber(cost)} XP</p>
+                          </div>
+                        </div>
+                        <Button
+                          className="w-full rounded-full h-12 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
+                          disabled={!canRedeem || redeemReward.isPending}
+                          onClick={() => handleRedeem(reward.id)}
+                        >
+                          {isRedeeming ? (
+                            <span className="flex items-center justify-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" /> Canjeando...
+                            </span>
+                          ) : canRedeem ? (
+                            `Canjear por ${formatNumber(cost)} XP`
+                          ) : (
+                            "XP insuficiente"
+                          )}
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-foreground">Tu inventario</h2>
+
+          {isUserRewardsError
+            ? renderError(
+                "No pudimos obtener tu inventario",
+                userRewardsError instanceof Error ? userRewardsError.message : "Intenta nuevamente."
+              )
+            : isUserRewardsLoading
+            ? renderRewardsSkeleton()
+            : claimedRewards.length === 0
+            ? (
+                <div className="bg-card border border-dashed border-border rounded-3xl p-6 text-center text-muted-foreground">
+                  Aún no has canjeado recompensas. Empieza con las de arriba.
+                </div>
+              )
+            : (
+                <div className="space-y-4">
+                  {claimedRewards.map((reward) => {
+                    const template = reward.reward_templates;
+                    const claimedAt = reward.claimed_at ? new Date(reward.claimed_at) : null;
+                    const claimedDate =
+                      claimedAt && !Number.isNaN(claimedAt.getTime())
+                        ? claimedAt.toLocaleDateString("es-ES", { dateStyle: "medium" })
+                        : "Sin fecha";
+
+                    return (
+                      <div
+                        key={reward.id}
+                        className="bg-card border border-border rounded-3xl p-5 shadow-sm flex items-center justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-4">
+                          <span className="text-2xl" aria-hidden>
+                            {template?.icon ?? "🎁"}
+                          </span>
+                          <div>
+                            <p className="text-base font-semibold text-foreground">
+                              {template?.title ?? "Recompensa"}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Canjeada el {claimedDate}
+                            </p>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          {statusTranslations[reward.status] ?? reward.status}
+                        </Badge>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+        </section>
       </div>
 
       <BottomNav />
@@ -99,3 +252,4 @@ const Rewards = () => {
 };
 
 export default Rewards;
+

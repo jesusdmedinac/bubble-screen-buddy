@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 58%
+**Progreso general del plan actual**: 62%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 52%
+- Fase 2: 60%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -37,8 +37,8 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 ---
 
-### 🔄 Fase 2: Implementación de Gamificación — 52%
-**Estado**: En progreso (52%)  
+### 🔄 Fase 2: Implementación de Gamificación — 60%
+**Estado**: En progreso (60%)  
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
@@ -65,14 +65,15 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
   - ✅ Visualización de desafíos activos del usuario con barra de progreso
   - ✅ Sistema de aceptación de desafíos funcional
 - ✅ Página de Perfil enriquecida con estadísticas de nivel, racha, desafíos y recompensas, incluyendo barra de progreso hacia el siguiente nivel
+- ✅ Página de Recompensas conectada a Lovable Cloud con canje de XP e inventario del usuario
 
 #### En Progreso
 - 🔄 Definir triggers de progreso para actividades guiadas fuera del chat
 
 #### Pendiente Inmediato
-- ⏳ UI de página de Recompensas con inventario
-- ⏳ Sistema de canje de XP por recompensas
 - ⏳ Definir triggers adicionales para actividades guiadas y logros especiales
+- ⏳ Implementar flujo para marcar recompensas como usadas o expiradas desde el inventario
+- ⏳ Diseñar indicadores de progreso para recompensas consumibles
 
 #### Bloqueadores
 Ninguno actualmente
@@ -107,7 +108,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ### Componentes
 - **Páginas**: 5 (Chat, Desafíos, Recompensas, Perfil, Auth)
 - **Componentes compartidos**: 3 (BottomNav, PremiumModal, ProtectedRoute)
-- **Hooks personalizados**: 4 (useChallenges, useChallengeProgressAutomation, useProfileStats, use-mobile)
+- **Hooks personalizados**: 5 (useChallenges, useChallengeProgressAutomation, useProfileStats, useRewards, use-mobile)
 - **Componentes UI (shadcn)**: ~40
 
 ### Autenticación
@@ -119,11 +120,11 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 
 1. **Inmediato** (Esta semana)
    - Definir triggers para actividades guiadas y logros especiales adicionales
-   - Diseñar UI funcional para canje de recompensas utilizando XP
+   - Diseñar flujo de uso/consumo de recompensas canjeadas
 
 2. **Corto Plazo** (Próximas 2 semanas)
-   - Desarrollar UI de página de Recompensas
-   - Sistema de canje de recompensas
+   - Implementar gestión de recompensas usadas/expiradas
+   - Añadir métricas visuales de progreso para recompensas
 
 3. **Medio Plazo** (Próximo mes)
    - Notificaciones de logros
@@ -138,10 +139,11 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 - Sistema de diseño basado en tokens semánticos HSL
 - Se definió plan para incorporar renderizado Markdown seguro en el chat, pendiente de ejecución
 - Se incorporó el hook `useProfileStats` para consolidar estadísticas de XP, rachas y recompensas en la página de perfil
+- Se añadió el hook `useRewards` para consultar catálogo, inventario y ejecutar canjes con validación de XP
 
 ### Deuda Técnica
 - Ninguna crítica identificada actualmente
-- Las páginas de Desafíos y Recompensas son placeholders que necesitan implementación completa
+- Falta consolidar flujos de uso de recompensas (marcar como usadas/expiradas) y métricas detalladas en Desafíos
 
 ### Consideraciones
 - Mantener el enfoque en experiencia de usuario fluida

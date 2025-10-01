@@ -42,15 +42,15 @@ Completar el MVP funcional de Bubble con chat IA operativo y bases de gamificaci
 - [x] Crear tabla `reward_templates` en la base de datos
 - [x] Crear tabla `user_rewards` para inventario
 - [x] Implementar sistema de puntos (XP)
-- [ ] UI para mostrar recompensas disponibles y desbloqueadas
-- [ ] Sistema de canje de puntos por recompensas
+- [x] UI para mostrar recompensas disponibles y desbloqueadas
+- [x] Sistema de canje de puntos por recompensas
 
 #### 2.3 Sistema de Progreso de Usuario
 - [x] Agregar campos a `profiles`: `xp`, `level`, `streak_days`, `last_activity_date`
 - [x] Implementar cálculo de nivel basado en XP
 - [x] Sistema de rachas (streak) por uso diario (funciones de DB)
 - [ ] Notificaciones de logros
- - [x] Actualizar página de perfil con estadísticas
+- [x] Actualizar página de perfil con estadísticas
 
 ## Iniciativa Paralela: Renderizado Markdown en Chat
 **Estado**: Planificado  
