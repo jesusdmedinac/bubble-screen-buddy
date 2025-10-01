@@ -321,6 +321,7 @@ export const useUpdateChallengeProgress = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["user-challenges"] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["profile-stats"] });
 
       if (data?.xpAwarded) {
         toast({

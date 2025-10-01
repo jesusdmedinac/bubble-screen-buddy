@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 55%
+**Progreso general del plan actual**: 58%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 48%
+- Fase 2: 52%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -37,8 +37,8 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 ---
 
-### 🔄 Fase 2: Implementación de Gamificación — 45%
-**Estado**: En progreso (45%)  
+### 🔄 Fase 2: Implementación de Gamificación — 52%
+**Estado**: En progreso (52%)  
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
@@ -64,6 +64,7 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
   - ✅ Página de Desafíos con lista de desafíos disponibles
   - ✅ Visualización de desafíos activos del usuario con barra de progreso
   - ✅ Sistema de aceptación de desafíos funcional
+- ✅ Página de Perfil enriquecida con estadísticas de nivel, racha, desafíos y recompensas, incluyendo barra de progreso hacia el siguiente nivel
 
 #### En Progreso
 - 🔄 Definir triggers de progreso para actividades guiadas fuera del chat
@@ -71,7 +72,6 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 #### Pendiente Inmediato
 - ⏳ UI de página de Recompensas con inventario
 - ⏳ Sistema de canje de XP por recompensas
-- ⏳ Actualización de página de Perfil con estadísticas de gamificación
 - ⏳ Definir triggers adicionales para actividades guiadas y logros especiales
 
 #### Bloqueadores
@@ -107,7 +107,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ### Componentes
 - **Páginas**: 5 (Chat, Desafíos, Recompensas, Perfil, Auth)
 - **Componentes compartidos**: 3 (BottomNav, PremiumModal, ProtectedRoute)
-- **Hooks personalizados**: 3 (useChallenges, useChallengeProgressAutomation, use-mobile)
+- **Hooks personalizados**: 4 (useChallenges, useChallengeProgressAutomation, useProfileStats, use-mobile)
 - **Componentes UI (shadcn)**: ~40
 
 ### Autenticación
@@ -118,14 +118,12 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Actualizar perfil con visualización de estadísticas
    - Definir triggers para actividades guiadas y logros especiales adicionales
    - Diseñar UI funcional para canje de recompensas utilizando XP
 
 2. **Corto Plazo** (Próximas 2 semanas)
    - Desarrollar UI de página de Recompensas
    - Sistema de canje de recompensas
-   - Actualizar perfil con estadísticas de gamificación
 
 3. **Medio Plazo** (Próximo mes)
    - Notificaciones de logros
@@ -139,6 +137,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 - Se mantiene el patrón de auto-creación de perfiles con triggers
 - Sistema de diseño basado en tokens semánticos HSL
 - Se definió plan para incorporar renderizado Markdown seguro en el chat, pendiente de ejecución
+- Se incorporó el hook `useProfileStats` para consolidar estadísticas de XP, rachas y recompensas en la página de perfil
 
 ### Deuda Técnica
 - Ninguna crítica identificada actualmente

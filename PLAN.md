@@ -50,7 +50,7 @@ Completar el MVP funcional de Bubble con chat IA operativo y bases de gamificaci
 - [x] Implementar cálculo de nivel basado en XP
 - [x] Sistema de rachas (streak) por uso diario (funciones de DB)
 - [ ] Notificaciones de logros
-- [ ] Actualizar página de perfil con estadísticas
+ - [x] Actualizar página de perfil con estadísticas
 
 ## Iniciativa Paralela: Renderizado Markdown en Chat
 **Estado**: Planificado  
