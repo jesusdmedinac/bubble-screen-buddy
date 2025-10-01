@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ArrowLeft, Trophy, Target, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -27,16 +27,27 @@ const Challenges = () => {
     await acceptChallenge.mutateAsync(challengeId);
   };
 
-  // Auto-assign challenges when component mounts
+  const hasRequestedAssignmentsRef = useRef(false);
+
+  // Auto-assign challenges once when component mounts
   useEffect(() => {
+    if (hasRequestedAssignmentsRef.current) return;
+    hasRequestedAssignmentsRef.current = true;
+
     const assignChallenges = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Assign daily challenges
+      if (!user) return;
+
+      try {
         await assignDailyChallenges.mutateAsync({ userId: user.id });
-        
-        // Assign personalized challenges based on user profile
+      } catch (error) {
+        console.error("No se pudieron asignar desafíos diarios:", error);
+      }
+
+      try {
         await assignPersonalizedChallenges.mutateAsync(user.id);
+      } catch (error) {
+        console.error("No se pudieron asignar desafíos personalizados:", error);
       }
     };
 

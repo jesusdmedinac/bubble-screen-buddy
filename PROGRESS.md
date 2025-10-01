@@ -93,6 +93,7 @@ Ninguno actualmente
 
 #### Completado Recientemente
 - ✅ Se añadió un flujo de funciones premium en la página de perfil que abre el `PremiumModal` al intentar usar beneficios exclusivos, mejorando la claridad del bloqueo premium.
+- ✅ Se limitó la asignación automática de desafíos a una sola ejecución por sesión y se evitó reinsertar desafíos ya asignados para impedir toasts y errores repetidos en la página de desafíos.
 
 #### Pendiente
 - Mantener la coherencia visual y de copy en el modal premium conforme se añadan nuevas funciones exclusivas.

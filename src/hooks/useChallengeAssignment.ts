@@ -79,8 +79,6 @@ export const useChallengeAssignment = () => {
           challenge_id: templateId,
           status: "active",
           progress: 0,
-          assigned_at: new Date().toISOString(),
-          auto_assigned: autoAssign,
         })
         .select(`*, challenge_templates (*)`)
         .single();
@@ -128,9 +126,25 @@ export const useChallengeAssignment = () => {
         return { success: true, count: 0 };
       }
 
+      const { data: existingChallenges, error: existingError } = await supabase
+        .from("user_challenges")
+        .select("challenge_id")
+        .eq("user_id", userId)
+        .in("status", ["pending", "active", "in_progress"]);
+
+      if (existingError) throw existingError;
+
+      const assignedChallengeIds = new Set((existingChallenges ?? []).map((challenge) => challenge.challenge_id));
+
+      const challengesToAssign = dailyChallenges.filter((template) => !assignedChallengeIds.has(template.id));
+
+      if (challengesToAssign.length === 0) {
+        return { success: true, count: 0 };
+      }
+
       // Assign each daily challenge that user doesn't already have
       const results = await Promise.allSettled(
-        dailyChallenges.map((template) => 
+        challengesToAssign.map((template) =>
           supabase
             .from("user_challenges")
             .insert({
@@ -138,15 +152,13 @@ export const useChallengeAssignment = () => {
               challenge_id: template.id,
               status: "active",
               progress: 0,
-              assigned_at: new Date().toISOString(),
-              auto_assigned: true,
             })
             .select()
             .single()
         )
       );
 
-      const successfulAssignments = results.filter(result => result.status === "fulfilled").length;
+      const successfulAssignments = results.filter((result) => result.status === "fulfilled").length;
 
       // Process the assigned challenges as activity events to trigger any automation
       for (const result of results) {
@@ -221,11 +233,19 @@ export const useChallengeAssignment = () => {
         return { success: true, count: 0 };
       }
 
-      // Filter out challenges the user already has active
-      const userChallengeIds = userChallenges?.map(uc => uc.challenge_id) || [];
-      const challengesToAssign = suggestedChallenges.filter(
-        challenge => !userChallengeIds.includes(challenge.id)
-      ).slice(0, 3); // Limit to 3 personalized challenges
+      const { data: existingChallenges, error: existingError } = await supabase
+        .from("user_challenges")
+        .select("challenge_id")
+        .eq("user_id", userId)
+        .in("status", ["pending", "active", "in_progress", "suggested", "completed"]);
+
+      if (existingError) throw existingError;
+
+      const existingChallengeIds = new Set((existingChallenges ?? []).map((challenge) => challenge.challenge_id));
+
+      const challengesToAssign = suggestedChallenges
+        .filter((challenge) => !existingChallengeIds.has(challenge.id))
+        .slice(0, 3); // Limit to 3 personalized challenges
 
       // Assign the selected challenges
       const results = await Promise.allSettled(
@@ -235,10 +255,8 @@ export const useChallengeAssignment = () => {
             .insert({
               user_id: userId,
               challenge_id: template.id,
-              status: "suggested", // Mark as suggested but not yet accepted
+              status: "active", // Mark as active when suggested
               progress: 0,
-              assigned_at: new Date().toISOString(),
-              auto_assigned: true,
             })
             .select()
             .single()
