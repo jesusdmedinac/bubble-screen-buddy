@@ -8,6 +8,8 @@ import {
   Trophy,
   Award,
   Loader2,
+  Wind,
+  Heart,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -138,6 +140,43 @@ const Profile = () => {
       toast({
         title: "Error",
         description: "No pudimos registrar tu check-in. Intenta más tarde.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleBreathingExercise = async () => {
+    try {
+      await processActivityEvent({ type: "breathing_exercise" });
+      toast({
+        title: "Respiración registrada",
+        description: "Sumaste progreso por tu pausa de respiración consciente.",
+      });
+    } catch (error) {
+      console.error("No se pudo registrar el ejercicio de respiración:", error);
+      toast({
+        title: "Error",
+        description: "No pudimos registrar la sesión. Intenta nuevamente.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleGratitudePractice = async () => {
+    try {
+      await processActivityEvent({
+        type: "gratitude_practice",
+        metadata: { tags: ["gratitud", "agradecido"] },
+      });
+      toast({
+        title: "Gratitud registrada",
+        description: "¡Excelente! Tu práctica de gratitud cuenta para desafíos especiales.",
+      });
+    } catch (error) {
+      console.error("No se pudo registrar la práctica de gratitud:", error);
+      toast({
+        title: "Error",
+        description: "Intenta registrar tu práctica más tarde.",
         variant: "destructive",
       });
     }
@@ -406,6 +445,25 @@ const Profile = () => {
               disabled={isProcessingChallenge}
             >
               Check-in diario completado
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full rounded-full h-14 text-base font-semibold"
+              onClick={handleBreathingExercise}
+              disabled={isProcessingChallenge}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <Wind className="h-4 w-4" /> Sesión de respiración consciente
+              </span>
+            </Button>
+            <Button
+              className="w-full rounded-full h-14 text-base font-semibold bg-secondary text-foreground"
+              onClick={handleGratitudePractice}
+              disabled={isProcessingChallenge}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <Heart className="h-4 w-4" /> Registro de gratitud
+              </span>
             </Button>
           </div>
         </section>

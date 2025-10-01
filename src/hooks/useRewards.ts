@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { toast } from "@/hooks/use-toast";
+import { useChallengeProgressAutomation } from "@/hooks/useChallenges";
 
 type RewardTemplate = Tables<"reward_templates">;
 type UserReward = Tables<"user_rewards"> & {
@@ -61,6 +62,7 @@ export const useUserRewards = () => {
 
 export const useRedeemReward = () => {
   const queryClient = useQueryClient();
+  const { processActivityEvent } = useChallengeProgressAutomation();
 
   return useMutation({
     mutationFn: async ({ rewardId }: RedeemParams) => {
@@ -142,7 +144,7 @@ export const useRedeemReward = () => {
 
       return { userReward, cost };
     },
-    onSuccess: ({ userReward, cost }) => {
+    onSuccess: async ({ userReward, cost }) => {
       queryClient.invalidateQueries({ queryKey: ["user-rewards"] });
       queryClient.invalidateQueries({ queryKey: ["reward-templates"] });
       queryClient.invalidateQueries({ queryKey: ["profile-stats"] });
@@ -152,6 +154,19 @@ export const useRedeemReward = () => {
         title: "Recompensa canjeada",
         description: `Gastaste ${cost} XP para obtener "${title}"`,
       });
+
+      try {
+        await processActivityEvent({
+          type: "reward_redeemed",
+          metadata: {
+            rewardId: userReward.reward_id,
+            tags: [title],
+            cost,
+          },
+        });
+      } catch (eventError) {
+        console.error("No se pudo procesar trigger de recompensa canjeada:", eventError);
+      }
     },
     onError: (error) => {
       const message = error instanceof Error ? error.message : "No pudimos canjear la recompensa";
@@ -163,4 +178,3 @@ export const useRedeemReward = () => {
     },
   });
 };
-

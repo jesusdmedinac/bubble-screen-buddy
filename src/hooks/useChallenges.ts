@@ -13,9 +13,23 @@ type ChatMessage = {
   content: string;
 };
 
+type ActivityEventType =
+  | "daily_check_in"
+  | "guided_reflection"
+  | "breathing_exercise"
+  | "gratitude_practice"
+  | "mindful_break"
+  | "focus_session"
+  | "reward_redeemed"
+  | "custom";
+
 type ActivityEvent = {
-  type: "daily_check_in" | "guided_reflection" | "breathing_exercise" | "custom";
-  metadata?: Record<string, unknown>;
+  type: ActivityEventType;
+  metadata?: {
+    challengeId?: string;
+    tags?: string[];
+    [key: string]: unknown;
+  };
 };
 
 type UserProfile = Tables<"profiles">;
@@ -64,6 +78,15 @@ const REFLECTION_KEYWORDS = new Set(
   ].map(normalizeText)
 );
 
+const ACTIVITY_KEYWORDS: Partial<Record<ActivityEventType, string[]>> = {
+  guided_reflection: ["reflexion", "claridad", "intencion"],
+  breathing_exercise: ["respiracion", "calma", "breath", "respira"],
+  gratitude_practice: ["gratitud", "agradecido", "agradecer"],
+  mindful_break: ["pausa", "mindful", "atencion", "consciente"],
+  focus_session: ["enfoque", "productivo", "concentracion"],
+  reward_redeemed: ["recompensa", "canje", "premio"],
+};
+
 const countEmotionMentions = (messages: ChatMessage[]) => {
   const found = new Set<string>();
 
@@ -96,15 +119,14 @@ const shouldCompleteChallenge = (
   const normalizedTitle = normalizeText(title);
 
   if (activity) {
-    if (activity.type === "guided_reflection") {
-      if (normalizedTitle.includes("reflexion")) {
-        return true;
-      }
-    }
+    const activityKeywords = new Set<string>(
+      (ACTIVITY_KEYWORDS[activity.type] ?? []).map(normalizeText)
+    );
 
-    if (activity.type === "breathing_exercise") {
-      if (normalizedTitle.includes("calma") || normalizedTitle.includes("respiracion")) {
-        return true;
+    const metadataTags = activity.metadata?.tags ?? [];
+    for (const rawTag of metadataTags) {
+      if (typeof rawTag === "string" && rawTag.trim().length > 0) {
+        activityKeywords.add(normalizeText(rawTag));
       }
     }
 
@@ -112,6 +134,29 @@ const shouldCompleteChallenge = (
       const targetId = activity.metadata?.challengeId;
       if (typeof targetId === "string") {
         return challenge.challenge_id === targetId || challenge.id === targetId;
+      }
+    }
+
+    if (activity.type === "reward_redeemed") {
+      const rewardId = activity.metadata?.challengeId;
+      if (typeof rewardId === "string") {
+        return challenge.challenge_id === rewardId || challenge.id === rewardId;
+      }
+
+      if (
+        normalizedTitle.includes("recompensa") ||
+        normalizedTitle.includes("canje") ||
+        normalizedTitle.includes("premio")
+      ) {
+        return true;
+      }
+    }
+
+    if (activityKeywords.size > 0) {
+      for (const keyword of activityKeywords) {
+        if (normalizedTitle.includes(keyword)) {
+          return true;
+        }
       }
     }
   }

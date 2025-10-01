@@ -2,11 +2,11 @@
 
 **Última actualización**: 2025-09-30  
 **Fase actual**: Fase 2 - Implementación de Gamificación  
-**Progreso general del plan actual**: 62%
+**Progreso general del plan actual**: 64%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
-- Fase 2: 60%
+- Fase 2: 65%
 - Fase 3: 0%
 - Fase 4: 0%
 
@@ -37,8 +37,8 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 
 ---
 
-### 🔄 Fase 2: Implementación de Gamificación — 60%
-**Estado**: En progreso (60%)  
+### 🔄 Fase 2: Implementación de Gamificación — 65%
+**Estado**: En progreso (65%)  
 **Iniciada el**: 2025-09-30
 
 #### Completado Recientemente
@@ -66,14 +66,14 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
   - ✅ Sistema de aceptación de desafíos funcional
 - ✅ Página de Perfil enriquecida con estadísticas de nivel, racha, desafíos y recompensas, incluyendo barra de progreso hacia el siguiente nivel
 - ✅ Página de Recompensas conectada a Lovable Cloud con canje de XP e inventario del usuario
+- ✅ Triggers adicionales para actividades guiadas (respiración, gratitud, canje de recompensas) con quick actions en Perfil y automatización de logros
 
 #### En Progreso
-- 🔄 Definir triggers de progreso para actividades guiadas fuera del chat
+- 🔄 Diseñar indicadores de progreso para recompensas consumibles
 
 #### Pendiente Inmediato
-- ⏳ Definir triggers adicionales para actividades guiadas y logros especiales
 - ⏳ Implementar flujo para marcar recompensas como usadas o expiradas desde el inventario
-- ⏳ Diseñar indicadores de progreso para recompensas consumibles
+- ⏳ Diseñar confirmaciones y estados para consumo de recompensas
 
 #### Bloqueadores
 Ninguno actualmente
@@ -119,12 +119,12 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)
-   - Definir triggers para actividades guiadas y logros especiales adicionales
    - Diseñar flujo de uso/consumo de recompensas canjeadas
+   - Implementar marcado manual de recompensas como usadas o expiradas
 
 2. **Corto Plazo** (Próximas 2 semanas)
-   - Implementar gestión de recompensas usadas/expiradas
    - Añadir métricas visuales de progreso para recompensas
+   - Incorporar indicadores en Desafíos para actividades guiadas recurrentes
 
 3. **Medio Plazo** (Próximo mes)
    - Notificaciones de logros
