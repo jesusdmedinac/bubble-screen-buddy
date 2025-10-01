@@ -35,6 +35,7 @@ El proyecto mantiene 4 documentos markdown que DEBES consultar y actualizar:
 
 - Si hiciste un cambio en el código, actualiza al menos PROGRESS.md. No hay excepciones.
 - Debes sugerir un mensaje de commit en cada paso del desarrollo.
+- Por cada funcionalidad nueva que se agregue, debes crear pruebas manuales en `.bugster/tests/**` y actualizar el plan de testing correspondiente.
 
 ## Sobre Bubble
 
@@ -130,6 +131,14 @@ Bubble es una aplicación de asistente AI conversacional con gamificación. Los 
 - Explica antes de actuar si hay ambigüedad
 - Pregunta antes de hacer cambios arquitectónicos grandes
 - Usa español para comunicarte con el usuario actual
+
+## Testing Manual
+
+### Requisitos de Pruebas
+- Por cada funcionalidad nueva que se agregue, se deben crear pruebas manuales en el directorio `.bugster/tests/**`
+- Las pruebas deben estar en formato YAML siguiendo el esquema existente
+- Cada prueba debe incluir: nombre, página afectada, ruta del archivo, tarea a verificar, pasos de ejecución y resultado esperado
+- Antes de marcar una tarea como completada, se debe haber creado y verificado la prueba manual correspondiente
 
 ## Mantenimiento de Este Documento
 Actualiza AGENTS.md cuando:

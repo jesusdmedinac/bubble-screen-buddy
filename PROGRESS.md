@@ -116,6 +116,10 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 - **Auto-confirm emails**: Habilitado
 - **Validación**: Server-side con `getUser()`
 
+### Testing
+- **Pruebas manuales**: 5 en `.bugster/tests/**` (authentication, navigation, challenges, not-found, user authentication)
+- **Directorio de pruebas**: `.bugster/tests/**` para nuevas funcionalidades
+
 ## Próximos Pasos (Orden de Prioridad)
 
 1. **Inmediato** (Esta semana)

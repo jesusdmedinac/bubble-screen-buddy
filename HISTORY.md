@@ -142,6 +142,11 @@ Se define el plan de gamificación que incluye:
 - Exportación de historial de chat
 - Integración con redes sociales
 
+### Testing
+- Implementar un proceso consistente de pruebas manuales en `.bugster/tests/**` para cada nueva funcionalidad
+- Asegurar que todas las nuevas features tengan pruebas asociadas antes de ser marcadas como completadas
+- Mantener actualizado el directorio de pruebas con nuevas pruebas para cada iteración
+
 ---
 
 **Próxima actualización esperada**: Al completar Fase 2 (Gamificación) o si hay cambio significativo de dirección.

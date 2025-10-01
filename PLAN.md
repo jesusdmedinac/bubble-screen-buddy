@@ -113,6 +113,11 @@ Habilitar soporte seguro de Markdown en los mensajes del chat para mejorar la ex
 - Sistema de recompensas extensible
 - Preparar para múltiples idiomas
 
+### Testing
+- Agregar pruebas manuales en `.bugster/tests/**` por cada funcionalidad nueva
+- Mantener un plan de testing actualizado en los documentos markdown
+- Verificar manualmente las nuevas funcionalidades antes de pasarlas como completadas
+
 ## Métricas de Éxito
 - Tiempo de respuesta del chat < 2s
 - Tasa de retención diaria > 40%
