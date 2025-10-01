@@ -31,12 +31,16 @@ El proyecto mantiene 4 documentos markdown que DEBES consultar y actualizar:
   - Documenta decisiones técnicas significativas
   - Registra migraciones de base de datos importantes
 
-### REGLAS
+## Reglas de Desarrollo
 
 - Si hiciste un cambio en el código, actualiza al menos PROGRESS.md. No hay excepciones.
 - Debes sugerir un mensaje de commit en cada paso del desarrollo.
 - Por cada funcionalidad nueva que se agregue, debes crear pruebas manuales en `.bugster/tests/**` y actualizar el plan de testing correspondiente.
 - Antes de cada commit, debes identificar y ejecutar las pruebas manuales relevantes de `.bugster/tests/**` que correspondan a la funcionalidad modificada o que pueda verse afectada por el cambio, usando Bugster como sistema de QA para verificar que no se introdujeron regresiones.
+
+### Bugster
+
+Leer el archivo BUGSTER.md para entender cómo funciona Bugster y cómo usarlo.
 
 ## Sobre Bubble
 
