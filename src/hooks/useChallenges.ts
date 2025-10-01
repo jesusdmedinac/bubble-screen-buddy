@@ -370,7 +370,7 @@ export const useUpdateChallengeProgress = () => {
 
       if (data?.xpAwarded) {
         toast({
-          title: "¡XP ganada!",
+          title: "🎉 ¡Desafío completado y XP ganada!",
           description: `Sumaste ${data.xpAwarded} XP por completar "${data.challengeTitle}"`,
         });
       }

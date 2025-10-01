@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowLeft, Gift, Loader2 } from "lucide-react";
+import { ArrowLeft, Gift, Loader2, CheckCircle2, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
   useUserRewards,
   useRedeemReward,
 } from "@/hooks/useRewards";
+import { useUpdateRewardStatus } from "@/hooks/useUpdateRewardStatus";
 
 const formatNumber = (value: number) => new Intl.NumberFormat("es-ES").format(value);
 
@@ -43,7 +44,9 @@ const Rewards = () => {
     error: userRewardsError,
   } = useUserRewards();
   const redeemReward = useRedeemReward();
+  const updateRewardStatus = useUpdateRewardStatus();
   const [pendingRewardId, setPendingRewardId] = useState<string | null>(null);
+  const [pendingUseRewardId, setPendingUseRewardId] = useState<string | null>(null);
 
   const totalXp = stats?.xp ?? 0;
   const formattedXp = formatNumber(totalXp);
@@ -57,6 +60,15 @@ const Rewards = () => {
       await redeemReward.mutateAsync({ rewardId });
     } finally {
       setPendingRewardId(null);
+    }
+  };
+
+  const handleUseReward = async (rewardId: string) => {
+    try {
+      setPendingUseRewardId(rewardId);
+      await updateRewardStatus.mutateAsync({ rewardId, status: "used" });
+    } finally {
+      setPendingUseRewardId(null);
     }
   };
 
@@ -160,9 +172,16 @@ const Rewards = () => {
                                 </p>
                               </div>
                             </div>
-                            <Badge variant="secondary" className="w-fit">
-                              {typeTranslations[reward.type] ?? reward.type}
-                            </Badge>
+                            <div className="flex flex-wrap gap-2">
+                              <Badge variant="secondary" className="w-fit">
+                                {typeTranslations[reward.type] ?? reward.type}
+                              </Badge>
+                              {reward.type === "consumable" && (
+                                <Badge variant="outline" className="border-dashed">
+                                  Consumible
+                                </Badge>
+                              )}
+                            </div>
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-muted-foreground">Costo</p>
@@ -216,28 +235,64 @@ const Rewards = () => {
                       claimedAt && !Number.isNaN(claimedAt.getTime())
                         ? claimedAt.toLocaleDateString("es-ES", { dateStyle: "medium" })
                         : "Sin fecha";
+                    
+                    const isConsumable = template?.type === "consumable";
+                    const isUsable = reward.status === "claimed" && isConsumable;
+                    const isUsed = reward.status === "used";
+                    const isPendingUse = pendingUseRewardId === reward.id && updateRewardStatus.isPending;
 
                     return (
                       <div
                         key={reward.id}
-                        className="bg-card border border-border rounded-3xl p-5 shadow-sm flex items-center justify-between gap-4"
+                        className="bg-card border border-border rounded-3xl p-5 shadow-sm"
                       >
-                        <div className="flex items-center gap-4">
-                          <span className="text-2xl" aria-hidden>
-                            {template?.icon ?? "🎁"}
-                          </span>
-                          <div>
-                            <p className="text-base font-semibold text-foreground">
-                              {template?.title ?? "Recompensa"}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              Canjeada el {claimedDate}
-                            </p>
+                        <div className="flex items-center justify-between gap-4 mb-3">
+                          <div className="flex items-center gap-4">
+                            <span className="text-2xl" aria-hidden>
+                              {template?.icon ?? "🎁"}
+                            </span>
+                            <div>
+                              <p className="text-base font-semibold text-foreground">
+                                {template?.title ?? "Recompensa"}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                Canjeada el {claimedDate}
+                              </p>
+                            </div>
                           </div>
+                          <Badge variant="outline">
+                            {statusTranslations[reward.status] ?? reward.status}
+                          </Badge>
                         </div>
-                        <Badge variant="outline">
-                          {statusTranslations[reward.status] ?? reward.status}
-                        </Badge>
+                        
+                        {isUsable && (
+                          <div className="flex justify-end">
+                            <Button
+                              size="sm"
+                              className="h-8 text-sm font-medium"
+                              onClick={() => handleUseReward(reward.id)}
+                              disabled={isPendingUse}
+                            >
+                              {isPendingUse ? (
+                                <span className="flex items-center gap-2">
+                                  <Loader2 className="h-4 w-4 animate-spin" /> Usando...
+                                </span>
+                              ) : (
+                                <span className="flex items-center gap-1">
+                                  <CheckCircle2 className="h-4 w-4" /> Usar
+                                </span>
+                              )}
+                            </Button>
+                          </div>
+                        )}
+                        
+                        {isUsed && (
+                          <div className="flex justify-end">
+                            <Badge variant="secondary" className="gap-1">
+                              <CheckCircle2 className="h-4 w-4" /> Usada
+                            </Badge>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

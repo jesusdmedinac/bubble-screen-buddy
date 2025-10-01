@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { toast } from "@/hooks/use-toast";
 import { useChallengeProgressAutomation } from "@/hooks/useChallenges";
+import { useAchievementNotifications } from "@/hooks/useAchievementNotifications";
 
 type RewardTemplate = Tables<"reward_templates">;
 type UserReward = Tables<"user_rewards"> & {
@@ -151,8 +152,8 @@ export const useRedeemReward = () => {
 
       const title = userReward.reward_templates?.title ?? "Recompensa";
       toast({
-        title: "Recompensa canjeada",
-        description: `Gastaste ${cost} XP para obtener "${title}"`,
+        title: "🎉 ¡Recompensa canjeada!",
+        description: `Has gastado ${cost} XP para obtener "${title}". ¡Disfrútala!`,
       });
 
       try {
