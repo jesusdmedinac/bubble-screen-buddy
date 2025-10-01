@@ -1,0 +1,16 @@
+name: Challenge Acceptance and Completion
+page: desafios
+page_path: src/pages/Challenges.tsx
+task: Verify user can accept challenges and track progress
+steps:
+- Login with valid credentials
+- Navigate to the /desafios page
+- Verify available challenges are displayed in the catalog
+- Click on an available challenge to accept it
+- Verify the challenge appears in the "Active Challenges" section
+- Verify the challenge progress bar updates when activity is performed
+- Navigate to the challenge and perform required actions
+- Verify challenge completion marks the challenge as completed
+- Verify XP is awarded upon challenge completion
+- Check profile page to confirm XP increase
+expected_result: User can accept challenges, track progress, complete them, and receive XP rewards

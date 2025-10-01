@@ -1,0 +1,16 @@
+name: Chat Functionality
+page: chat
+page_path: src/pages/Chat.tsx
+task: Verify main chat with AI functionality works correctly
+steps:
+- Login with valid credentials
+- Navigate to the main / chat page
+- Verify the chat interface is displayed with message history area
+- Type a message in the input field at the bottom
+- Click the send button or press enter
+- Verify the message appears in the chat history with user alignment
+- Verify Bubble's response appears in the chat history with AI alignment
+- Verify the response comes as streaming content
+- Send another message and verify conversation continues
+- Verify previous conversation history persists
+expected_result: User can successfully send messages and receive streaming responses from Bubble AI, with conversation history maintained

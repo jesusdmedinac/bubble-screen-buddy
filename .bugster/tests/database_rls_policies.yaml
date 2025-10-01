@@ -1,0 +1,16 @@
+name: Database RLS Policies
+page: various
+page_path: database functions
+task: Verify Row Level Security policies protect user data appropriately
+steps:
+- Login with one user account
+- Access your profile, challenges, rewards, and chat history
+- Verify you can only see your own data
+- Navigate to another user's potential data points (if UI allows attempting)
+- Verify you cannot access another user's data
+- Test creating a new challenge completion
+- Verify the data is properly associated with your user ID
+- Test with multiple user accounts if available
+- Verify each user only sees their own information
+- Verify that data isolation is maintained across all features (challenges, rewards, profile, chat)
+expected_result: RLS policies properly restrict access so users can only view and modify their own data

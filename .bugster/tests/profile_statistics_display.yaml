@@ -1,0 +1,16 @@
+name: Profile Statistics Display
+page: perfil
+page_path: src/pages/Profile.tsx
+task: Verify user profile displays correct statistics and progress
+steps:
+- Login with valid credentials
+- Navigate to the /perfil page
+- Verify user's level is displayed correctly
+- Verify XP bar shows current progress toward next level
+- Verify streak days are displayed correctly
+- Verify number of challenges completed is shown
+- Verify rewards collected are displayed
+- Check that statistics update after completing a challenge
+- Check that statistics update after redeeming a reward
+- Verify quick actions for guided reflection and check-ins are available
+expected_result: User profile accurately displays all statistics including level, XP progress, streak, challenges completed, and rewards

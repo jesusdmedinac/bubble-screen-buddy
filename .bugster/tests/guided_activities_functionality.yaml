@@ -1,0 +1,19 @@
+name: Guided Activities Functionality
+page: perfil
+page_path: src/pages/Profile.tsx
+task: Verify guided activities (breathing, gratitude) function correctly
+steps:
+- Login with valid credentials
+- Navigate to the /perfil page
+- Locate the quick action buttons for guided activities
+- Click on the breathing exercise quick action
+- Verify the breathing activity interface appears
+- Complete the breathing exercise
+- Verify XP is awarded for completing the activity
+- Verify streak is maintained after completing the activity
+- Click on the gratitude exercise quick action
+- Verify the gratitude activity interface appears
+- Complete the gratitude exercise
+- Verify XP is awarded for completing the activity
+- Verify streak is maintained after completing the activity
+expected_result: User can access and complete guided activities from the profile page, receiving XP and maintaining streaks

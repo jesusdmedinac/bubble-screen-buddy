@@ -1,0 +1,16 @@
+name: Rewards System and XP Redemption
+page: recompensas
+page_path: src/pages/Rewards.tsx
+task: Verify user can view rewards and redeem them using XP
+steps:
+- Login with valid credentials
+- Navigate to the /recompensas page
+- Verify available rewards are displayed with their XP costs
+- Verify user's current XP balance is displayed
+- Select a reward that user can afford
+- Click the redeem button
+- Verify the reward is added to user's inventory
+- Verify XP balance is reduced by the appropriate amount
+- Check that the reward appears in the user's inventory
+- Verify the updated XP balance is reflected in the profile
+expected_result: User can browse rewards, redeem them using XP points, and see rewards added to their inventory

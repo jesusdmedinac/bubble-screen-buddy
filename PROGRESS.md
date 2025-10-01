@@ -67,6 +67,11 @@ El MVP base de Bubble está operativo con chat IA funcional y autenticación rob
 - ✅ Página de Perfil enriquecida con estadísticas de nivel, racha, desafíos y recompensas, incluyendo barra de progreso hacia el siguiente nivel
 - ✅ Página de Recompensas conectada a Lovable Cloud con canje de XP e inventario del usuario
 - ✅ Triggers adicionales para actividades guiadas (respiración, gratitud, canje de recompensas) con quick actions en Perfil y automatización de logros
+- ✅ Sistema de chat con IA funcional (página principal `/`)
+- ✅ Autenticación con validación server-side
+- ✅ Navegación entre páginas principales (Chat, Desafíos, Recompensas, Perfil)
+- ✅ Sistema de recompensas con canje de XP
+- ✅ Sistema de progreso de usuario (XP, niveles, rachas)
 
 #### En Progreso
 - 🔄 Diseñar indicadores de progreso para recompensas consumibles

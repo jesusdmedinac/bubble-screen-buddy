@@ -1,0 +1,16 @@
+name: Streak Maintenance
+page: perfil
+page_path: src/pages/Profile.tsx
+task: Verify user streak is maintained and updated correctly
+steps:
+- Login with valid credentials
+- Navigate to the /perfil page
+- Verify current streak days are displayed
+- Perform a daily check-in using quick action
+- Verify streak counter increases by 1
+- Perform a guided reflection using quick action
+- Verify streak is maintained after completing these activities
+- Check that streak is preserved between sessions
+- Verify streak resets appropriately if not active for multiple days (as per business logic)
+- Confirm streak is displayed on other pages when relevant
+expected_result: User streak is accurately maintained, updated, and displayed across the application

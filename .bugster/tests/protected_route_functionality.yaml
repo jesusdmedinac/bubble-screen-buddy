@@ -1,0 +1,15 @@
+name: Protected Route Functionality
+page: protected routes
+page_path: src/components/ProtectedRoute.tsx
+task: Verify protected routes properly handle authentication
+steps:
+- Navigate directly to a protected route (e.g., /desafios) without being logged in
+- Verify automatic redirection to the /auth page
+- Login with valid credentials
+- Verify successful navigation to the intended protected page
+- Logout from the application
+- Attempt to navigate to a protected route again
+- Verify redirection to the /auth page
+- Verify protected routes properly validate user session
+- Test with an invalid/expired session to ensure proper handling
+expected_result: Protected routes redirect unauthenticated users to the auth page and allow access only to authenticated users

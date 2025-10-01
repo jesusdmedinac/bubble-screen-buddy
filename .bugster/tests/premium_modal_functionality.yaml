@@ -1,0 +1,15 @@
+name: Premium Modal Component
+page: various
+page_path: src/components/PremiumModal.tsx
+task: Verify premium modal displays and functions correctly
+steps:
+- Login with valid credentials
+- Navigate to any page that has premium features
+- Trigger an action that should show the PremiumModal (e.g., accessing premium content)
+- Verify the PremiumModal appears with appropriate content
+- Verify the modal contains information about premium benefits
+- Verify the modal has appropriate call-to-action buttons
+- Click the close button or outside the modal
+- Verify the modal closes properly
+- Verify normal functionality is restricted as expected for non-premium features
+expected_result: PremiumModal displays properly when premium features are accessed and provides clear information about premium benefits
