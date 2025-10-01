@@ -1,0 +1,10 @@
+name: Challenges Page Navigation
+page: desafios
+page_path: src/pages/Challenges.tsx
+task: Verify user can view available challenges
+steps:
+- Login with valid credentials
+- Navigate to the /desafios page through the bottom navigation
+- Verify challenges are displayed with their titles and descriptions
+- Verify challenge cards are clickable or interactive
+expected_result: Challenges are displayed correctly on the challenges page

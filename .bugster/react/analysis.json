@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "timestamp": 1759212677.009918,
+    "git": {
+      "branch": "main",
+      "commit": "78ae05390c87cc5f2ca07ea512fc6dd937648751"
+    }
+  },
+  "data": {
+    "framework": {
+      "id": "react",
+      "name": "React.js",
+      "dir_path": "/Users/jesusdmedinac/proyectos/Bubble/Vibe coding/bubble-screen-buddy"
+    },
+    "router_type": "react-router",
+    "stats": {
+      "fileCount": 72,
+      "routeCount": 6,
+      "apiRouteCount": 0,
+      "layoutCount": 0
+    },
+    "layouts": [],
+    "routes": [
+      {
+        "routePath": "/auth",
+        "relativeFilePath": "src/pages/Auth.tsx",
+        "layoutChain": [],
+        "components": [
+          "Auth",
+          "Label",
+          "Input",
+          "Button"
+        ],
+        "hasParams": false,
+        "hasForm": true,
+        "hooks": [
+          "useNavigate",
+          "useEffect",
+          "useState",
+          "useToast"
+        ],
+        "eventHandlers": [
+          "handleSubmit",
+          "onSubmit",
+          "onChange",
+          "onClick"
+        ],
+        "featureFlags": []
+      },
+      {
+        "routePath": "/",
+        "relativeFilePath": "src/components/ProtectedRoute.tsx",
+        "layoutChain": [],
+        "components": [
+          "ProtectedRoute"
+        ],
+        "hasParams": false,
+        "hasForm": false,
+        "hooks": [
+          "useNavigate",
+          "useState",
+          "useEffect"
+        ],
+        "eventHandlers": [],
+        "featureFlags": []
+      },
+      {
+        "routePath": "/desafios",
+        "relativeFilePath": "src/components/ProtectedRoute.tsx",
+        "layoutChain": [],
+        "components": [
+          "ProtectedRoute"
+        ],
+        "hasParams": false,
+        "hasForm": false,
+        "hooks": [
+          "useNavigate",
+          "useState",
+          "useEffect"
+        ],
+        "eventHandlers": [],
+        "featureFlags": []
+      },
+      {
+        "routePath": "/recompensas",
+        "relativeFilePath": "src/components/ProtectedRoute.tsx",
+        "layoutChain": [],
+        "components": [
+          "ProtectedRoute"
+        ],
+        "hasParams": false,
+        "hasForm": false,
+        "hooks": [
+          "useNavigate",
+          "useState",
+          "useEffect"
+        ],
+        "eventHandlers": [],
+        "featureFlags": []
+      },
+      {
+        "routePath": "/perfil",
+        "relativeFilePath": "src/components/ProtectedRoute.tsx",
+        "layoutChain": [],
+        "components": [
+          "ProtectedRoute"
+        ],
+        "hasParams": false,
+        "hasForm": false,
+        "hooks": [
+          "useNavigate",
+          "useState",
+          "useEffect"
+        ],
+        "eventHandlers": [],
+        "featureFlags": []
+      },
+      {
+        "routePath": "*",
+        "relativeFilePath": "src/pages/NotFound.tsx",
+        "layoutChain": [],
+        "components": [
+          "NotFound"
+        ],
+        "hasParams": true,
+        "hasForm": false,
+        "hooks": [
+          "useLocation",
+          "useEffect"
+        ],
+        "eventHandlers": [],
+        "featureFlags": []
+      }
+    ],
+    "api_routes": [],
+    "all_paths": [
+      "eslint.config.js",
+      "postcss.config.js",
+      "src/App.tsx",
+      "src/components/BottomNav.tsx",
+      "src/components/PremiumModal.tsx",
+      "src/components/ProtectedRoute.tsx",
+      "src/components/ui/accordion.tsx",
+      "src/components/ui/alert-dialog.tsx",
+      "src/components/ui/alert.tsx",
+      "src/components/ui/aspect-ratio.tsx",
+      "src/components/ui/avatar.tsx",
+      "src/components/ui/badge.tsx",
+      "src/components/ui/breadcrumb.tsx",
+      "src/components/ui/button.tsx",
+      "src/components/ui/calendar.tsx",
+      "src/components/ui/card.tsx",
+      "src/components/ui/carousel.tsx",
+      "src/components/ui/chart.tsx",
+      "src/components/ui/checkbox.tsx",
+      "src/components/ui/collapsible.tsx",
+      "src/components/ui/command.tsx",
+      "src/components/ui/context-menu.tsx",
+      "src/components/ui/dialog.tsx",
+      "src/components/ui/drawer.tsx",
+      "src/components/ui/dropdown-menu.tsx",
+      "src/components/ui/form.tsx",
+      "src/components/ui/hover-card.tsx",
+      "src/components/ui/input-otp.tsx",
+      "src/components/ui/input.tsx",
+      "src/components/ui/label.tsx",
+      "src/components/ui/menubar.tsx",
+      "src/components/ui/navigation-menu.tsx",
+      "src/components/ui/pagination.tsx",
+      "src/components/ui/popover.tsx",
+      "src/components/ui/progress.tsx",
+      "src/components/ui/radio-group.tsx",
+      "src/components/ui/resizable.tsx",
+      "src/components/ui/scroll-area.tsx",
+      "src/components/ui/select.tsx",
+      "src/components/ui/separator.tsx",
+      "src/components/ui/sheet.tsx",
+      "src/components/ui/sidebar.tsx",
+      "src/components/ui/skeleton.tsx",
+      "src/components/ui/slider.tsx",
+      "src/components/ui/sonner.tsx",
+      "src/components/ui/switch.tsx",
+      "src/components/ui/table.tsx",
+      "src/components/ui/tabs.tsx",
+      "src/components/ui/textarea.tsx",
+      "src/components/ui/toast.tsx",
+      "src/components/ui/toaster.tsx",
+      "src/components/ui/toggle-group.tsx",
+      "src/components/ui/toggle.tsx",
+      "src/components/ui/tooltip.tsx",
+      "src/components/ui/use-toast.ts",
+      "src/hooks/use-mobile.tsx",
+      "src/hooks/use-toast.ts",
+      "src/hooks/useChallenges.ts",
+      "src/integrations/supabase/client.ts",
+      "src/integrations/supabase/types.ts",
+      "src/lib/utils.ts",
+      "src/main.tsx",
+      "src/pages/Auth.tsx",
+      "src/pages/Challenges.tsx",
+      "src/pages/Chat.tsx",
+      "src/pages/NotFound.tsx",
+      "src/pages/Profile.tsx",
+      "src/pages/Rewards.tsx",
+      "src/vite-env.d.ts",
+      "supabase/functions/chat-with-ai/index.ts",
+      "tailwind.config.ts",
+      "vite.config.ts"
+    ]
+  }
+}

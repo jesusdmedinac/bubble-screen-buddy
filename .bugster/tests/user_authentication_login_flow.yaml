@@ -1,0 +1,11 @@
+name: User Authentication Login Flow
+page: auth
+page_path: src/pages/Auth.tsx
+task: Verify users can log in with valid credentials
+steps:
+- Navigate to the /auth page
+- Enter valid email in the email input field
+- Enter valid password in the password input field
+- Click the login button
+- Verify redirection to the main dashboard page
+expected_result: User is successfully authenticated and redirected to the main page

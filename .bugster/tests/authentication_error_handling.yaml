@@ -1,0 +1,12 @@
+name: Authentication Error Handling
+page: auth
+page_path: src/pages/Auth.tsx
+task: Verify error messages for invalid login credentials
+steps:
+- Navigate to the /auth page
+- Enter invalid or non-existent email
+- Enter any password
+- Click the login button
+- Verify error toast notification appears with authentication error message
+expected_result: Error toast notification appears with appropriate message when invalid
+  credentials are used

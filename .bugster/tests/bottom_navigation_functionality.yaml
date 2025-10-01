@@ -1,0 +1,15 @@
+name: Bottom Navigation Functionality
+page: perfil
+page_path: src/pages/Profile.tsx
+task: Verify bottom navigation allows switching between main sections
+steps:
+- Login with valid credentials
+- Verify bottom navigation bar is visible
+- Click on the Profile icon in the bottom navigation
+- Verify navigation to the Profile page
+- Click on the Challenges icon in the bottom navigation
+- Verify navigation to the Challenges page
+- Click on the Rewards icon in the bottom navigation
+- Verify navigation to the Rewards page
+expected_result: User can navigate between main app sections using the bottom navigation
+  bar

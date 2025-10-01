@@ -1,0 +1,10 @@
+name: Not Found Page Redirection
+page: not-found
+page_path: src/pages/NotFound.tsx
+task: Verify invalid routes redirect to the Not Found page
+steps:
+- Navigate to an invalid route (e.g., /invalid-route)
+- Verify the Not Found page is displayed
+- Verify any navigation options on the Not Found page work correctly
+expected_result: When navigating to a non-existent route, user is shown the Not Found
+  page

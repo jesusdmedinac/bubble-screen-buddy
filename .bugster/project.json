@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "timestamp": 1759212675339,
+    "git": {
+      "branch": "main",
+      "commit": "78ae05390c87cc5f2ca07ea512fc6dd937648751"
+    }
+  },
+  "data": {
+    "frameworks": [
+      {
+        "id": "react",
+        "name": "React.js",
+        "dir_path": "/Users/jesusdmedinac/proyectos/Bubble/Vibe coding/bubble-screen-buddy"
+      }
+    ]
+  }
+}
