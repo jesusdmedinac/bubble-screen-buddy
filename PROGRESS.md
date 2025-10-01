@@ -1,13 +1,13 @@
 # PROGRESS.md - Estado Actual del Proyecto Bubble
 
 **Última actualización**: 2025-09-30  
-**Fase actual**: Fase 3 - Mejoras de Experiencia (Iniciando)  
-**Progreso general del plan actual**: 100%
+**Fase actual**: Fase 3 - Mejoras de Experiencia (En progreso)  
+**Progreso general del plan actual**: 85%
 
 ## Resumen de Progreso por Fase
 - Fase 1: 100%
 - Fase 2: 100%
-- Fase 3: 0%
+- Fase 3: 5%
 - Fase 4: 0%
 
 ## Resumen Ejecutivo
@@ -87,11 +87,15 @@ Ninguno actualmente
 
 ---
 
-### 📅 Fase 3: Mejoras de Experiencia — 0%
-**Estado**: Planificado (0%)  
+### 📅 Fase 3: Mejoras de Experiencia — 5%
+**Estado**: En progreso (5%)  
 **Inicio estimado**: TBD
 
-No iniciada. Pendiente de completar Fase 2.
+#### Completado Recientemente
+- ✅ Se añadió un flujo de funciones premium en la página de perfil que abre el `PremiumModal` al intentar usar beneficios exclusivos, mejorando la claridad del bloqueo premium.
+
+#### Pendiente
+- Mantener la coherencia visual y de copy en el modal premium conforme se añadan nuevas funciones exclusivas.
 
 ---
 
@@ -138,6 +142,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 2. **Corto Plazo** (Próximas 2 semanas)
    - Añadir métricas visuales de progreso para recompensas
    - Incorporar indicadores en Desafíos para actividades guiadas recurrentes
+   - Definir señal de membresía premium y conectar el modal con la verificación real de acceso
 
 3. **Medio Plazo** (Próximo mes)
    - Notificaciones de logros
@@ -153,6 +158,7 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 - Se definió plan para incorporar renderizado Markdown seguro en el chat, pendiente de ejecución
 - Se incorporó el hook `useProfileStats` para consolidar estadísticas de XP, rachas y recompensas en la página de perfil
 - Se añadió el hook `useRewards` para consultar catálogo, inventario y ejecutar canjes con validación de XP
+- Se agregó gating visible de funciones premium en la página de perfil usando `PremiumModal` para resaltar beneficios exclusivos.
 
 ### Deuda Técnica
 - Ninguna crítica identificada actualmente

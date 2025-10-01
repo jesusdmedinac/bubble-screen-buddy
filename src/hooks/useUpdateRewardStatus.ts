@@ -28,7 +28,7 @@ export const useUpdateRewardStatus = () => {
       if (fetchError) throw fetchError;
       if (!userReward) throw new Error("Recompensa no encontrada");
 
-      let updateData: { status: string; used_at?: string | null } = { status };
+      const updateData: { status: string; used_at?: string | null } = { status };
 
       // Set used_at timestamp if changing to 'used' status
       if (status === "used") {

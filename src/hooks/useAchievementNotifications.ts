@@ -17,14 +17,14 @@ export interface AchievementNotification {
   message: string;
   timestamp: Date;
   read: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export const useAchievementNotifications = () => {
   const [notifications, setNotifications] = useState<AchievementNotification[]>([]);
   
   // Function to show a toast notification for achievements
-  const showAchievementNotification = (type: NotificationType, title: string, message: string, metadata?: Record<string, any>) => {
+  const showAchievementNotification = (type: NotificationType, title: string, message: string, metadata?: Record<string, unknown>) => {
     // Show the toast notification
     toast({
       title,

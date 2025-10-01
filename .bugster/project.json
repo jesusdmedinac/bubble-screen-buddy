@@ -13,6 +13,11 @@
         "name": "React.js",
         "dir_path": "/Users/jesusdmedinac/proyectos/Bubble/Vibe coding/bubble-screen-buddy"
       }
-    ]
+    ],
+    "commands": {
+      "test": {
+        "firstExecuted": true
+      }
+    }
   }
 }

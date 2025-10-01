@@ -1,19 +1,26 @@
-import { X, Infinity as InfinityIcon, TrendingUp, Headphones } from "lucide-react";
+import { X, Infinity as InfinityIcon, TrendingUp, Headphones, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 
 interface PremiumModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  featureName?: string | null;
+  featureDescription?: string | null;
 }
 
-const PremiumModal = ({ open, onOpenChange }: PremiumModalProps) => {
+const PremiumModal = ({ open, onOpenChange, featureName, featureDescription }: PremiumModalProps) => {
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">("yearly");
+
+  const highlightedFeature = featureName?.trim() ?? "";
+  const highlightedDescription = featureDescription?.trim() ?? "";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -27,6 +34,10 @@ const PremiumModal = ({ open, onOpenChange }: PremiumModalProps) => {
           >
             <X className="h-6 w-6" />
           </Button>
+          <DialogTitle className="sr-only">Plane premium de Bubble</DialogTitle>
+          <DialogDescription className="sr-only">
+            Revisa los planes de suscripción para desbloquear beneficios exclusivos.
+          </DialogDescription>
         </DialogHeader>
         
         <div className="px-6 pb-6 space-y-8">
@@ -34,9 +45,25 @@ const PremiumModal = ({ open, onOpenChange }: PremiumModalProps) => {
           <div className="text-center pt-8">
             <h2 className="text-4xl font-bold mb-3">Desbloquea Premium</h2>
             <p className="text-muted-foreground text-base">
-              Mejora tu experiencia con funciones exclusivas y soporte prioritario.
+              {highlightedFeature
+                ? `La función “${highlightedFeature}” forma parte del plan premium.`
+                : "Mejora tu experiencia con funciones exclusivas y soporte prioritario."}
             </p>
           </div>
+
+          {highlightedFeature && (
+            <div className="rounded-3xl border border-premium/50 bg-premium/10 p-4 text-left">
+              <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-premium">
+                <Star className="h-4 w-4" /> Función seleccionada
+              </span>
+              <p className="mt-2 text-lg font-semibold text-foreground">{highlightedFeature}</p>
+              {highlightedDescription && (
+                <p className="text-sm text-muted-foreground">
+                  {highlightedDescription}
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Features */}
           <div className="space-y-5">

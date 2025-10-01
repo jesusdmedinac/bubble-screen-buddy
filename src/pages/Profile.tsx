@@ -10,6 +10,9 @@ import {
   Loader2,
   Wind,
   Heart,
+  Crown,
+  Moon,
+  ShieldCheck,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,6 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
 import BottomNav from "@/components/BottomNav";
+import PremiumModal from "@/components/PremiumModal";
 import { useProfileStats } from "@/hooks/useProfileStats";
 import { useChallengeProgressAutomation } from "@/hooks/useChallenges";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +33,13 @@ type StatCardProps = {
   label: string;
   value: string;
   description: string;
+};
+
+type PremiumFeature = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  benefit: string;
 };
 
 const StatCard = ({ icon: Icon, label, value, description }: StatCardProps) => (
@@ -67,6 +78,8 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+  const [selectedPremiumFeature, setSelectedPremiumFeature] = useState<PremiumFeature | null>(null);
 
   const {
     data: stats,
@@ -180,6 +193,32 @@ const Profile = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const premiumFeatures: PremiumFeature[] = [
+    {
+      title: "Tema oscuro premium",
+      description: "Activa un tema exclusivo diseñado para sesiones nocturnas sin distracciones.",
+      icon: Moon,
+      benefit: "Tema oscuro premium",
+    },
+    {
+      title: "Retos élite",
+      description: "Accede a desafíos avanzados con recompensas aceleradas de XP.",
+      icon: ShieldCheck,
+      benefit: "Retos élite desbloqueados",
+    },
+    {
+      title: "Aura dorada de perfil",
+      description: "Personaliza tu perfil con un marco exclusivo y animaciones especiales.",
+      icon: Crown,
+      benefit: "Personalización premium",
+    },
+  ];
+
+  const handlePremiumFeatureClick = (feature: PremiumFeature) => {
+    setSelectedPremiumFeature(feature);
+    setIsPremiumModalOpen(true);
   };
 
   const handleSave = async () => {
@@ -467,7 +506,60 @@ const Profile = () => {
             </Button>
           </div>
         </section>
+
+        <section className="space-y-4 bg-card border border-dashed border-premium/60 rounded-3xl p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold text-foreground">Funciones premium</h3>
+              <p className="text-sm text-muted-foreground">
+                Explora ventajas exclusivas disponibles con la membresía premium.
+              </p>
+            </div>
+            <span className="inline-flex items-center rounded-full bg-premium/20 px-3 py-1 text-xs font-semibold text-premium">
+              Premium
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {premiumFeatures.map((feature) => {
+              const FeatureIcon = feature.icon;
+              return (
+                <button
+                  type="button"
+                  key={feature.title}
+                  onClick={() => handlePremiumFeatureClick(feature)}
+                  className="w-full rounded-3xl border border-premium/50 bg-background/60 px-4 py-4 text-left transition hover:border-premium hover:bg-background"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-2xl bg-premium/15 text-premium">
+                        <FeatureIcon className="h-5 w-5" />
+                      </span>
+                      <div className="space-y-1">
+                        <p className="text-base font-semibold text-foreground">{feature.title}</p>
+                        <p className="text-sm text-muted-foreground">{feature.description}</p>
+                      </div>
+                    </div>
+                    <span className="text-sm font-semibold text-premium">Desbloquear</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
       </div>
+
+      <PremiumModal
+        open={isPremiumModalOpen}
+        onOpenChange={(open) => {
+          setIsPremiumModalOpen(open);
+          if (!open) {
+            setSelectedPremiumFeature(null);
+          }
+        }}
+        featureName={selectedPremiumFeature?.title}
+        featureDescription={selectedPremiumFeature?.benefit}
+      />
 
       <BottomNav />
     </div>
