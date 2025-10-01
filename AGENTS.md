@@ -36,6 +36,7 @@ El proyecto mantiene 4 documentos markdown que DEBES consultar y actualizar:
 - Si hiciste un cambio en el código, actualiza al menos PROGRESS.md. No hay excepciones.
 - Debes sugerir un mensaje de commit en cada paso del desarrollo.
 - Por cada funcionalidad nueva que se agregue, debes crear pruebas manuales en `.bugster/tests/**` y actualizar el plan de testing correspondiente.
+- Antes de cada commit, debes identificar y ejecutar las pruebas manuales relevantes de `.bugster/tests/**` que correspondan a la funcionalidad modificada o que pueda verse afectada por el cambio, usando Bugster como sistema de QA para verificar que no se introdujeron regresiones.
 
 ## Sobre Bubble
 
@@ -139,6 +140,14 @@ Bubble es una aplicación de asistente AI conversacional con gamificación. Los 
 - Las pruebas deben estar en formato YAML siguiendo el esquema existente
 - Cada prueba debe incluir: nombre, página afectada, ruta del archivo, tarea a verificar, pasos de ejecución y resultado esperado
 - Antes de marcar una tarea como completada, se debe haber creado y verificado la prueba manual correspondiente
+
+### Workflow de QA con Bugster
+- Antes de cada commit, identifica qué funcionalidades se han modificado o podrían verse afectadas por los cambios
+- Ejecuta las pruebas manuales relevantes de `.bugster/tests/**` que correspondan a estas funcionalidades
+- Verifica que todas las pruebas relevantes pasen correctamente antes de proceder con el commit
+- Si alguna prueba falla, corrige el problema antes de continuar
+- Usa las pruebas como sistema de QA para prevenir regresiones y asegurar calidad
+- Documenta en PROGRESS.md si se encontraron y resolvieron problemas durante la ejecución de pruebas
 
 ## Mantenimiento de Este Documento
 Actualiza AGENTS.md cuando:

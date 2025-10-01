@@ -146,6 +146,9 @@ Se define el plan de gamificación que incluye:
 - Implementar un proceso consistente de pruebas manuales en `.bugster/tests/**` para cada nueva funcionalidad
 - Asegurar que todas las nuevas features tengan pruebas asociadas antes de ser marcadas como completadas
 - Mantener actualizado el directorio de pruebas con nuevas pruebas para cada iteración
+- Implementar workflow de QA con Bugster para verificar cambios antes de commits
+- Establecer proceso de ejecución de pruebas selectivas según funcionalidades afectadas
+- Usar pruebas manuales como sistema de verificación para desarrollo automatizado
 
 ---
 

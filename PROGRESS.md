@@ -122,8 +122,10 @@ No iniciada. Pendiente de completar Fase 2 y 3.
 - **Validación**: Server-side con `getUser()`
 
 ### Testing
-- **Pruebas manuales**: 5 en `.bugster/tests/**` (authentication, navigation, challenges, not-found, user authentication)
+- **Pruebas manuales**: 14 en `.bugster/tests/**` (authentication, navigation, challenges, not-found, user authentication, chat, rewards, profile, streak, premium modal, protected routes, guided activities, database RLS)
 - **Directorio de pruebas**: `.bugster/tests/**` para nuevas funcionalidades
+- **Workflow de QA**: Ejecutar pruebas manuales relevantes antes de cada commit para prevenir regresiones
+- **Sistema de verificación**: Usar Bugster como sistema de QA para el desarrollo automatizado
 
 ## Próximos Pasos (Orden de Prioridad)
 
